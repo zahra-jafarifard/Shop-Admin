@@ -1,0 +1,41 @@
+.Card{
+    border: 2px silver solid;
+    border-radius: 8px;
+    box-shadow: 3px 3px rgb(243, 209, 236);
+    width: 360px;
+    margin: auto;
+    background-color:rgb(205, 238, 249);
+}
+.Image{
+    border: 3px silver solid;
+    border-radius: 130px;
+    width: 210px;
+    height: 210px;
+    margin: auto;
+    margin-top: 15px;
+    overflow: hidden;
+
+}
+.body{
+    width: 70%;
+    /* border: 2px rgb(18, 7, 7) solid; */
+    margin: auto;
+    margin-top: 20px;
+}
+
+.body label{
+    padding: 2px;
+    font-weight: 500;
+    color: rgb(102, 99, 99);
+
+}
+
+.submit{
+padding: 12px;
+margin-left: 21%;
+
+}
+.submit Button{
+   padding: 7px 60px;
+
+}

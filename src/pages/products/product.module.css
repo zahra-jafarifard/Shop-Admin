@@ -1,0 +1,17 @@
+.addNewProduct{
+    font-size: 28px;
+    position: relative;
+    float: right;
+    top: -44px ;
+    right: 8px;
+}
+
+.content{
+    margin: 30px;
+    justify-content: space-between;
+
+}
+
+.blog{
+    justify-items: left;
+}
