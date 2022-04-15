@@ -24,7 +24,7 @@ const initialState = [
 
 
 const reducer = (state, action) => {
-    console.log(state, action)
+    // console.log(state, action)
     switch (action.type) {
         case "Change":
             return state.map((data) => {
@@ -57,7 +57,10 @@ const Forms = (props) => {
         const _productId = searchParams.get("productId");
         return fetch(`http://localhost:5000/products/${_productId}`)
             .then(res => {
-                return res.json();
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
+                return res.json()
             })
             .then(product => {
                 const _product = product.product;
@@ -82,8 +85,10 @@ const Forms = (props) => {
                 // image: inputValue.image,
             })
         })
-            .then(() => {
-                console.log('product updated successfully.....', inputValue[0])
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 navigate('/products');
             })
             .catch(err => {

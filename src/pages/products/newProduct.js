@@ -26,8 +26,11 @@ class Forms extends React.Component {
     }
 
     componentDidMount = () => {
-        return fetch('http://localhost:5000/categories')
+        return fetch('http://localhost:5000/products/categories')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_categories => {
@@ -54,7 +57,10 @@ class Forms extends React.Component {
                 createdByUserId: creatorId
             })
         })
-            .then(() => {
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 this.props.navigate('/products')
             })
             .catch(err => {
@@ -120,7 +126,8 @@ class Forms extends React.Component {
                                     >
                                         <option defaultChecked>Choose Category</option>
                                         {this.state.getCategoriesState.map((parent, index) => {
-                                            return <option key={index} value={parent._id.toString()}>{parent.name}</option>
+                                            console.log(parent)
+                                            return <option key={index} value={parent.id.toString()}>{parent.name}</option>
                                         })}
                                     </Input>
                                     

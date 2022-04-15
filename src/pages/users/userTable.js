@@ -42,10 +42,9 @@ const UserTables = (props) => {
         headers: { 'Content-Type': 'application/json' },
       })
         .then(res => {
-          return res.json()
-        })
-        .then(msg => {
-          console.log(msg)
+          if (!res.ok) {
+            return new Error(res.message)
+          }
         })
         .catch(err => {
           console.log(err)

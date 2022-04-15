@@ -12,11 +12,13 @@ const Cards = () => {
     useEffect(() => {
         return fetch('http://localhost:5000/products')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_products => {
                 setProductState(_products.products)
-                // console.log(_products.products)
             })
             .catch(err => {
                 console.log(err)

@@ -28,6 +28,9 @@ class Forms extends React.Component {
     componentDidMount = () => {
         return fetch('http://localhost:5000/categories/parents')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_parents => {
@@ -39,7 +42,7 @@ class Forms extends React.Component {
                 console.log(err)
             })
     }
-    
+
     submitHandler = () => {
         fetch('http://localhost:5000/categories', {
             method: 'POST',
@@ -49,6 +52,12 @@ class Forms extends React.Component {
                 parent: this.state.parent,
             })
         })
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
+                return res.json();
+            })
             .then(() => {
                 this.props.navigate('/categories')
             })
@@ -73,7 +82,7 @@ class Forms extends React.Component {
                     <Card style={{ borderRadius: "24px" }}>
                         <CardTitle tag="h5" className="border-bottom p-3 mb-0">
                             <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
-                            ADD NEW ROLL
+                            ADD NEW CATEGORY
                         </CardTitle>
 
                         <CardBody >
@@ -95,7 +104,7 @@ class Forms extends React.Component {
                                         onChange={this.changeHandler}
                                     >
                                         <option defaultChecked>Choose Category</option>
-                                        <option value='0'>Parent Category</option>
+                                        <option value=''>Parent Category</option>
                                         {this.state.getParentCategoriesState.map((parent, index) => {
                                             return <option key={index} value={parent._id.toString()}>{parent.name}</option>
                                         })}

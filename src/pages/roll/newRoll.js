@@ -17,13 +17,13 @@ class Forms extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', 
+            name: '',
             getRollsState: [],
 
         }
     }
 
-   
+
     submitHandler = () => {
         fetch('http://localhost:5000/rolls', {
             method: 'POST',
@@ -32,7 +32,10 @@ class Forms extends React.Component {
                 name: this.state.name,
             })
         })
-            .then(() => {
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 this.props.navigate('/rolls')
             })
             .catch(err => {
@@ -71,7 +74,7 @@ class Forms extends React.Component {
                                         value={this.state.name}
                                         onChange={this.changeHandler}
                                     />
-                                 
+
                                 </FormGroup>
                                 <Button onClick={this.submitHandler}>Submit</Button>
                             </Form>

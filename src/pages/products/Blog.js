@@ -28,11 +28,11 @@ const Blog = (props) => {
         headers: { 'Content-Type': 'application/json' },
       })
         .then(res => {
+          if (!res.ok) {
+            return new Error(res.message)
+          }
           return res.json()
         })
-        // .then(msg => { 
-        //   console.log(msg)
-        // })
         .catch(err => {
           console.log(err)
         })

@@ -79,13 +79,14 @@ const Forms = (props) => {
 
         return fetch(`http://localhost:5000/users/${_userId}`)
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json();
             })
             .then(user => {
                 const _user = user.user;
                 dispatch({ type: "FetchUser", _user });
-
-
             }).catch(err => {
                 console.log(err);
 
@@ -96,7 +97,10 @@ const Forms = (props) => {
     useEffect(() => {
         return fetch('http://localhost:5000/rolls')
             .then(res => {
-                return res.json()
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
+                return res.json();
             })
             .then(rolls => {
                 return dispatch({
@@ -126,10 +130,11 @@ const Forms = (props) => {
                 // image: inputValue.image,
             })
         })
-            .then(() => {
-                console.log('user data sent.....', inputValue[0])
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 navigate('/users');
-                
             })
             .catch(err => {
                 console.log(err)

@@ -1,13 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import * as styles from './profile.module.css'
 import user1 from "../../assets/images/users/user1.jpg";
 import { Button } from 'reactstrap';
 
-const Profile = (props) => {
+const Profile = () => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const editHandler = (id) =>{
         // navigate(`/edit-user/?userId=${id}`);

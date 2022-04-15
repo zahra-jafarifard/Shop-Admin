@@ -26,6 +26,9 @@ class Forms extends React.Component {
     componentDidMount = () => {
         return fetch('http://localhost:5000/rolls')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_rolls => {
@@ -53,7 +56,10 @@ class Forms extends React.Component {
                 roll: this.state.roll,
             })
         })
-            .then(() => {
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 this.props.navigate('/users')
             })
             .catch(err => {

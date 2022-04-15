@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './categoryTable.module.css';
 
-const UserTables = (props) => {
+const UserTables = () => {
 
-    const [name, setName] = useState('');
-    const [parentId, setParentId] = useState('');
+    // const [name, setName] = useState('');
+    // const [parentId, setParentId] = useState('');
     const [categoriesState, setCategoriesState] = useState([]);
 
 
@@ -16,11 +16,14 @@ const UserTables = (props) => {
     useEffect(() => {
         return fetch('http://localhost:5000/categories')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_categories => {
-                setCategoriesState(_categories.categories)
-                console.log(_categories.categories)
+                // console.log(_categories)
+                return setCategoriesState(_categories.categories)
             })
             .catch(err => {
                 console.log(err)
@@ -33,24 +36,26 @@ const UserTables = (props) => {
     }
 
 
-    const deleteHandler = (id) => {
+    const deleteHandler = async (id) => {
+        let _deletedItem;
+        let _response;
 
         if (window.confirm("ARE YOU SURE?") === true) {
-
-            setCategoriesState(prevCategory => prevCategory.filter(category => category._id.toString() !== id))
-            fetch(`http://localhost:5000/categories/${id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-            })
-                .then(res => {
-                    return res.json()
+            try {
+                _deletedItem = await fetch(`http://localhost:5000/categories/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
                 })
-                .then(msg => {
-                    console.log(msg)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+                _response = await _deletedItem.json();
+                if (!_deletedItem.ok) {
+                    return new Error(_response);
+                }
+                else {
+                    return await setCategoriesState(prevCategory => prevCategory.filter(category => category._id.toString() !== id))
+                }
+            } catch (error) {
+                return new Error(error.message)
+            }
         } else {
             return;
         }
@@ -87,26 +92,27 @@ const UserTables = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        {categoriesState.map((tdata, index) => (
-                                            <tr key={index} className="border-top">
-                                                {console.log(name)}
-                                                <td>{tdata.name}</td>
-                                                {!tdata.parentId.name ? 'no'}
-                                                <td>{tdata.parentId.name}</td>
+                                    {categoriesState.map((tdata, index) => (
+                                        <tr key={index} className="border-top">
+                                            <td>{tdata.name}</td>
+                                            {!tdata.parentId ?
+                                                <td style={{ fontWeight: "bold" }}>It's a parent </td>
+                                                :
+                                                <td>{tdata.parentId.name}</td>}
 
-                                                <td style={{  borderLeft:'none' ,display: "flex", alignContent: "center", justifyContent: "space-around" }}>
-                                                    <span onClick={() => editHandler(tdata._id.toString())}>
-                                                        <i title='Edit' className="bi bi-pencil-square"></i>
-                                                    </span>
-                                                    <span onClick={() => deleteHandler(tdata._id.toString())}>
-                                                        <i title='Delete' className="bi bi-x-square" ></i>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                            <td style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }}>
+                                                <span onClick={() => editHandler(tdata._id)}>
+                                                    <i title='Edit' className="bi bi-pencil-square"></i>
+                                                </span>
+                                                <span onClick={() => deleteHandler(tdata._id.toString())}>
+                                                    <i title='Delete' className="bi bi-x-square" ></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
 
 
-                                    </tbody>
+                                </tbody>
 
                             </Table>
                         </CardBody>

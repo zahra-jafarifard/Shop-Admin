@@ -18,7 +18,7 @@ import {
 const initialState = [
     {
         name: '',
-        parent:'',
+        parent: '',
         getParentCategoriesState: []
 
     }]
@@ -62,6 +62,9 @@ const Forms = (props) => {
     useEffect(() => {
         return fetch('http://localhost:5000/categories/parents')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_parents => {
@@ -80,10 +83,12 @@ const Forms = (props) => {
 
         return fetch(`http://localhost:5000/categories/${_categoryId}`)
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_category => {
-                console.log(_category.category)
                 dispatch({ type: "FetchCategory", category: _category.category });
 
             })
@@ -99,15 +104,17 @@ const Forms = (props) => {
         fetch(`http://localhost:5000/categories/${_categoryId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
+
             body: JSON.stringify({
                 name: inputValue[0].name,
                 parentId: inputValue[0].parent,
             })
         })
-            .then(() => {
-                console.log('category edited.....', inputValue[0])
+            .then((res) => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 navigate('/categories');
-
             })
             .catch(err => {
                 console.log(err)

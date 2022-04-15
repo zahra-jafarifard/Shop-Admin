@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row } from "reactstrap";
 import SalesChart from "../components/dashboard/SalesChart";
 import Feeds from "../components/dashboard/Feeds";
-import UsersTables from "../pages/users/userTable";
 import styles from '../pages/products/product.module.css'
 import Blog from "../pages/products/Blog";
 

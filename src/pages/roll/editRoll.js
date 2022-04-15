@@ -57,6 +57,9 @@ const Forms = (props) => {
 
         return fetch(`http://localhost:5000/rolls/${_rollId}`)
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(roll => {
@@ -81,10 +84,11 @@ const Forms = (props) => {
                 name: inputValue[0].name,
             })
         })
-            .then(() => {
-                console.log('roll data sent.....', inputValue[0])
+            .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 navigate('/rolls');
-
             })
             .catch(err => {
                 console.log(err)

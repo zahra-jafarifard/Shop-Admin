@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './rollTable.module.css';
 
-const UserTables = (props) => {
+const UserTables = () => {
 
     const [name, setName] = useState('');
     const [rollsState, setRollsState] = useState([]);
@@ -15,11 +15,13 @@ const UserTables = (props) => {
     useEffect(() => {
         return fetch('http://localhost:5000/rolls')
             .then(res => {
+                if (!res.ok) {
+                    return new Error(res.message)
+                }
                 return res.json()
             })
             .then(_rolls => {
                 setRollsState(_rolls.rolls)
-                console.log(_rolls.rolls)
             })
             .catch(err => {
                 console.log(err)
@@ -41,10 +43,9 @@ const UserTables = (props) => {
                 headers: { 'Content-Type': 'application/json' },
             })
                 .then(res => {
-                    return res.json()
-                })
-                .then(msg => {
-                    console.log(msg)
+                    if (!res.ok) {
+                        return new Error(res.message)
+                    }
                 })
                 .catch(err => {
                     console.log(err)
