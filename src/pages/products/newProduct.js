@@ -109,8 +109,6 @@ class Forms extends React.Component {
                                         value={this.state.description}
                                         onChange={this.changeHandler}
                                     />
-
-
                                     <Label for="category">Main Category</Label>
                                     <Input id="category" name="category" type="select"
 
@@ -118,11 +116,9 @@ class Forms extends React.Component {
                                     >
                                         <option defaultChecked>Choose Category</option>
                                         {this.state.getCategoriesState.map((parent, index) => {
-                                            console.log(parent)
                                             return <option key={index} value={parent.id.toString()}>{parent.name}</option>
                                         })}
                                     </Input>
-                                    
                                     <Label for="file">File</Label>
                                     <Input id="file" name="file" type="file" value={this.state.image}
                                         onChange={this.changeHandler} />

@@ -1,7 +1,6 @@
 export const Delete = () => {
 
     const deleteFunction = async (id, api, setStates) => {
-        console.log(id, setStates, api)
         // setShoWModal(false);
         let Data;
         let _response;
@@ -15,7 +14,7 @@ export const Delete = () => {
                 return new Error(_response);
             }
             else {
-                return setStates(prevStates => prevStates.filter(prevState => prevState.id != id))
+                return setStates(prevStates => prevStates.filter(prevState => prevState.id !== id))
             }
         } catch (error) {
             return new Error(error.message)

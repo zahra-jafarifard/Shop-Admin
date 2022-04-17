@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 import DataTable from 'react-data-table-component';
 import user1 from "../../assets/images/users/user1.jpg";
+import { Delete } from '../../shared/deleteHandler';
 
 const PaginationUser = (props) => {
 
@@ -10,6 +11,8 @@ const PaginationUser = (props) => {
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(2);
+    
+    const { deleteFunction } = Delete()
 
   
 
@@ -54,7 +57,7 @@ const PaginationUser = (props) => {
                         <span style={{ padding: "13px" }} onClick={()=>props.editHandler(row.id)}>
                             <i title='Edit' className="bi bi-pencil-square"></i>
                         </span>
-                        <span style={{ padding: "13px" }} onClick={() => props.deleteHandler(row.id , setData)}>
+                        <span style={{ padding: "13px" }} onClick={() => props.showModalHandler(row.id , setData)}>
                             <i title='Delete' className="bi bi-x-square" ></i>
                         </span>
                     </div>)
@@ -71,11 +74,7 @@ const PaginationUser = (props) => {
         setData(responseData.users);
         setTotalRows(responseData.total);
         setLoading(false);
-
-        console.log(data)
-
     };
-
 
     const handlePageChange = page => {
         fetchUsers(page);
@@ -91,10 +90,14 @@ const PaginationUser = (props) => {
         setLoading(false);
     };
 
+    const deleteHandler = (id) => {
+        props.setShoWModal(false);
+        deleteFunction(id, 'users' ,setData);
+    }
 
     useEffect(() => {
         fetchUsers(); // fetch page 1 of users
-
+        props.deleteRef.current = deleteHandler
     }, []);
 
     return (

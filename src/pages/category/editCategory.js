@@ -65,7 +65,7 @@ const Forms = (props) => {
             dispatch({ type: "FetchParents", _parents: data });
         }
         fetchData();
-    }, [dispatch, fetchDataFunction])
+    }, [dispatch])
 
     useEffect(() => {
         const _categoryId = searchParams.get("categoryId");

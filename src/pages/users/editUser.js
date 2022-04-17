@@ -76,7 +76,7 @@ const EditUser = (props) => {
             dispatch({ type: "FetchUser", data });
         }
         fetchData();
-    }, [searchParams, dispatch, fetchDataFunction])
+    }, [searchParams, dispatch])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,7 +84,7 @@ const EditUser = (props) => {
             dispatch({ type: "SetRoll", _rolls: data });
         }
         fetchData();
-    }, [dispatch, fetchDataFunction])
+    }, [dispatch])
 
     const submitHandler = () => {
         const _userId = searchParams.get("userId");

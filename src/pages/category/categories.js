@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef , useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -8,53 +8,47 @@ import { Delete } from '../../shared/deleteHandler';
 import Modal from '../../shared/modal';
 import { fetchDataFunction } from '../../shared/FetchData';
 
-const CategoryTables = (props) => {
+const CategoryTables = () => {
 
-    const [showModal, setShoWModal] = useState(false);
     const [categoriesState, setCategoriesState] = useState([]);
+    const [showModal, setShoWModal] = useState(false);
+    const [id, setId] = useState();
     const modalRef = useRef(null);
-    const deleteCategoryRef = useRef();
     const navigate = useNavigate();
 
     const { deleteFunction } = Delete();
 
     useEffect(() => {
-        const fetchData = async () =>{
-        const data= await fetchDataFunction('categories')
+        const fetchData = async () => {
+            const data = await fetchDataFunction('categories')
             setCategoriesState(data)
         }
         fetchData();
-    }, [setCategoriesState , fetchDataFunction])
+    }, [setCategoriesState])
 
-    const editHandler = (id) => {
-        navigate(`/edit-category/?categoryId=${id}`);
-    }
+    const editHandler = (id) => { navigate(`/edit-category/?categoryId=${id}`); }
 
-    const showModalHandler = () => {
+    const showModalHandler = (id) => {
         setShoWModal(true);
+        setId(id);
     }
+    const cancelHandler = () => { setShoWModal(false); }
 
     const deleteHandler = async (id) => {
         setShoWModal(false);
         deleteFunction(id, 'categories', setCategoriesState);
     }
 
-    const cancelHandler = () => {
-        setShoWModal(false);
-    }
-
-    const addNewHandler = (props) => {
-        navigate('/new-category');
-    }
+    const addNewHandler = () => { navigate('/new-category'); }
 
     const footer = (
         <div>
-            <Button color="primary" onClick={() => deleteHandler(deleteCategoryRef.current.title)}>Yes</Button>
+            <Button color="primary" onClick={() => deleteHandler(id)}>Yes</Button>
             <Button color="secondary" onClick={cancelHandler}> No</Button>
         </div>
     )
     return (
-        <div>
+        <React.Fragment>
 
             {showModal && <Modal
                 refToggle={modalRef}
@@ -63,7 +57,6 @@ const CategoryTables = (props) => {
                 body='Do you want to delete?'
                 footer={footer}
             />}
-
             <Row>
                 <Col lg="12">
                     <Card>
@@ -89,12 +82,11 @@ const CategoryTables = (props) => {
                                                 <td style={{ fontWeight: "bold" }}>It's a parent </td>
                                                 :
                                                 <td>{tdata.parentId.name}</td>}
-
                                             <td style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }}>
                                                 <span onClick={() => editHandler(tdata._id)}>
                                                     <i title='Edit' className="bi bi-pencil-square"></i>
                                                 </span>
-                                                <span style={{ zIndex: '33' }} title={tdata._id} onClick={showModalHandler} ref={deleteCategoryRef} >
+                                                <span style={{ zIndex: '33' }} onClick={() => showModalHandler(tdata._id)}  >
                                                     <i title='Delete' className="bi bi-x-square" ></i>
                                                 </span>
                                             </td>
@@ -106,7 +98,7 @@ const CategoryTables = (props) => {
                     </Card>
                 </Col>
             </Row>
-        </div>
+        </React.Fragment>
     );
 };
 

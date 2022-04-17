@@ -63,7 +63,7 @@ const Forms = (props) => {
             dispatch({ type: "FetchProduct", data });
         }
         fetchData();
-    }, [searchParams, dispatch, fetchDataFunction])
+    }, [searchParams, dispatch])
 
 
     const submitHandler = () => {
