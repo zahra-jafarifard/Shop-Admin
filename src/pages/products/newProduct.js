@@ -15,6 +15,8 @@ import {
     Input,
     FormText,
 } from "reactstrap";
+import { Submit } from '../../shared/submitHandler';
+const { submitFunction } = Submit();
 
 class Forms extends React.Component {
     constructor(props) {
@@ -22,7 +24,7 @@ class Forms extends React.Component {
         this.state = {
             name: '', price: '', description: '', image: [],
             category: '', createdByUserId: '',
-            getCategoriesState:[],
+            getCategoriesState: [],
 
         }
     }
@@ -35,29 +37,40 @@ class Forms extends React.Component {
         fetchData();
     }
 
-    submitHandler = () => {
-        const creatorId ='625456a9156b5221202c6a47';
-        fetch('http://localhost:5000/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: this.state.name,
-                price: this.state.price,
-                description: this.state.description,
-                image: this.state.image,
-                category: this.state.category,
-                createdByUserId: creatorId
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                this.props.navigate('/products')
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    submitHandler = async () => {
+        const creatorId = '625456a9156b5221202c6a47';
+        const _body = {
+            name: this.state.name,
+            price: this.state.price,
+            description: this.state.description,
+            image: this.state.image,
+            category: this.state.category,
+            createdByUserId: creatorId
+        };
+        await submitFunction('products', 'POST', _body);
+        this.props.navigate(-1)
+
+        // fetch('http://localhost:5000/products', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         name: this.state.name,
+        //         price: this.state.price,
+        //         description: this.state.description,
+        //         image: this.state.image,
+        //         category: this.state.category,
+        //         createdByUserId: creatorId
+        //     })
+        // })
+        //     .then(res => {
+        //         if (!res.ok) {
+        //             return new Error(res.message)
+        //         }
+        //         this.props.navigate('/products')
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
 
     }
 

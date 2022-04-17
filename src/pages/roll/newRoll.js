@@ -12,8 +12,10 @@ import {
     Label,
     Input,
 } from "reactstrap";
+import { Submit } from '../../shared/submitHandler';
+const { submitFunction } = Submit()
 
-class Forms extends React.Component {
+class NewRoll extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,24 +26,12 @@ class Forms extends React.Component {
     }
 
 
-    submitHandler = () => {
-        fetch('http://localhost:5000/rolls', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: this.state.name,
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                this.props.navigate('/rolls')
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
+    submitHandler = async () => {
+        const _body = {
+            name: this.state.name,
+        };
+        await submitFunction('rolls', 'POST', _body);
+        this.props.navigate(-1)
     }
 
     changeHandler = (event) => {
@@ -61,7 +51,6 @@ class Forms extends React.Component {
                             <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
                             ADD NEW ROLL
                         </CardTitle>
-
                         <CardBody >
                             <Form>
                                 <FormGroup>
@@ -74,7 +63,6 @@ class Forms extends React.Component {
                                         value={this.state.name}
                                         onChange={this.changeHandler}
                                     />
-
                                 </FormGroup>
                                 <Button onClick={this.submitHandler}>Submit</Button>
                             </Form>
@@ -86,6 +74,5 @@ class Forms extends React.Component {
     };
 }
 
-
-export default withRouter(Forms);
+export default withRouter(NewRoll);
 

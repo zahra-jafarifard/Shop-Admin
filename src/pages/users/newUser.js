@@ -2,6 +2,8 @@ import React from 'react';
 
 import { fetchDataFunction } from '../../shared/FetchData';
 import { withRouter } from '../../shared/withRouter';
+import { Submit } from '../../shared/submitHandler';
+
 import {
     Card,
     Row,
@@ -15,6 +17,8 @@ import {
     Input,
     FormText,
 } from "reactstrap";
+
+const { submitFunction } = Submit()
 
 class NewUser extends React.Component {
     constructor(props) {
@@ -33,29 +37,41 @@ class NewUser extends React.Component {
         fetchData();
     }
 
-    submitHandler = () => {
-        fetch('http://localhost:5000/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: this.state.name,
-                family: this.state.family,
-                mobile: this.state.mobile,
-                email: this.state.email,
-                password: this.state.password,
-                image: this.state.image,
-                roll: this.state.roll,
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                this.props.navigate('/users')
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    submitHandler = async () => {
+        const _body = {
+            name: this.state.name,
+            family: this.state.family,
+            mobile: this.state.mobile,
+            email: this.state.email,
+            password: this.state.password,
+            image: this.state.image,
+            roll: this.state.roll,
+        };
+        await submitFunction('users', 'POST', _body);
+        this.props.navigate(-1)
+
+        // fetch('http://localhost:5000/users', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         name: this.state.name,
+        //         family: this.state.family,
+        //         mobile: this.state.mobile,
+        //         email: this.state.email,
+        //         password: this.state.password,
+        //         image: this.state.image,
+        //         roll: this.state.roll,
+        //     })
+        // })
+        //     .then(res => {
+        //         if (!res.ok) {
+        //             return new Error(res.message)
+        //         }
+        //         this.props.navigate('/users')
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
     }
 
     changeHandler = (event) => {

@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from '../../shared/withRouter';
 
 import { fetchDataFunction } from '../../shared/FetchData';
+import { Submit } from '../../shared/submitHandler';
 import {
     Card,
     Row,
@@ -14,8 +15,10 @@ import {
     Label,
     Input,
 } from "reactstrap";
+const { submitFunction } = Submit()
 
-class Forms extends React.Component {
+class NewCategory extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -24,6 +27,7 @@ class Forms extends React.Component {
             getParentCategoriesState: [],
 
         }
+
     }
 
     componentDidMount = () => {
@@ -34,27 +38,13 @@ class Forms extends React.Component {
         fetchData();
     }
 
-    submitHandler = () => {
-        fetch('http://localhost:5000/categories', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: this.state.name,
-                parent: this.state.parent,
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json();
-            })
-            .then(() => {
-                this.props.navigate('/categories')
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    submitHandler = async () => {
+        const _body = {
+            name: this.state.name,
+            parent: this.state.parent,
+        };
+        await submitFunction('categories', 'POST', _body);
+        this.props.navigate('/categories')
 
     }
 
@@ -75,7 +65,6 @@ class Forms extends React.Component {
                             <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
                             ADD NEW CATEGORY
                         </CardTitle>
-
                         <CardBody >
                             <Form>
                                 <FormGroup>
@@ -88,7 +77,6 @@ class Forms extends React.Component {
                                         value={this.state.name}
                                         onChange={this.changeHandler}
                                     />
-
                                     <Label for="parent">Parent Category</Label>
                                     <Input id="parent" name="parent" type="select"
 
@@ -100,7 +88,6 @@ class Forms extends React.Component {
                                             return <option key={index} value={parent._id.toString()}>{parent.name}</option>
                                         })}
                                     </Input>
-
                                 </FormGroup>
                                 <Button onClick={this.submitHandler}>Submit</Button>
                             </Form>
@@ -112,6 +99,5 @@ class Forms extends React.Component {
     };
 }
 
-
-export default withRouter(Forms);
+export default withRouter(NewCategory);
 

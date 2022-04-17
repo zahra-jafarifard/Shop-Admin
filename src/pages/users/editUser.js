@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
+import { Submit } from '../../shared/submitHandler';
+
 import {
     Card,
     Row,
@@ -37,7 +39,6 @@ const reducer = (state, action) => {
                 return { ...data, [action.name]: action.value };
             });
         case "SetRoll":
-            console.log(action._rolls)
             return state.map((data) => {
                 return {
                     ...data,
@@ -68,6 +69,7 @@ const EditUser = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const { submitFunction } = Submit();
 
     useEffect(() => {
         const _userId = searchParams.get("userId");
@@ -86,31 +88,42 @@ const EditUser = (props) => {
         fetchData();
     }, [dispatch])
 
-    const submitHandler = () => {
+    const submitHandler =async () => {
         const _userId = searchParams.get("userId");
-
-        fetch(`http://localhost:5000/users/${_userId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: inputValue[0].name,
-                family: inputValue[0].family,
-                mobile: inputValue[0].mobile,
-                email: inputValue[0].email,
-                password: inputValue[0].password,
-                roll: inputValue[0].roll,
+        const _body = {
+            name: inputValue[0].name,
+            family: inputValue[0].family,
+            mobile: inputValue[0].mobile,
+            email: inputValue[0].email,
+            password: inputValue[0].password,
+            roll: inputValue[0].roll,
                 // image: inputValue.image,
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                navigate(-1); //goBack
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        };
+        await submitFunction(`users/${_userId}`, 'PATCH', _body);
+        navigate(-1);
+
+        // fetch(`http://localhost:5000/users/${_userId}`, {
+        //     method: 'PATCH',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         name: inputValue[0].name,
+        //         family: inputValue[0].family,
+        //         mobile: inputValue[0].mobile,
+        //         email: inputValue[0].email,
+        //         password: inputValue[0].password,
+        //         roll: inputValue[0].roll,
+        //         // image: inputValue.image,
+        //     })
+        // })
+        //     .then(res => {
+        //         if (!res.ok) {
+        //             return new Error(res.message)
+        //         }
+        //         navigate(-1); //goBack
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
     }
 
     const changeHandler = (event) => {

@@ -52,7 +52,6 @@ const RollTables = () => {
     )
     return (
         <React.Fragment>
-
             {showModal && <Modal
                 refToggle={modalRef}
                 toggle

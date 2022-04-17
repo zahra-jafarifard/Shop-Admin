@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 import { Card, CardBody, CardTitle, Table, Col, Row, Button } from "reactstrap";
 import styles from './categoryTable.module.css';
 import { Delete } from '../../shared/deleteHandler';
@@ -20,8 +19,8 @@ const CategoryTables = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetchDataFunction('categories')
-            setCategoriesState(data)
+            const data = await fetchDataFunction('categories');
+            setCategoriesState(data);
         }
         fetchData();
     }, [setCategoriesState])

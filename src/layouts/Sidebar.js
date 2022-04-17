@@ -38,14 +38,6 @@ const navigation = [
     href: "/profile",
     icon: "bi bi-person-circle",
   },
- 
- 
-  
-  {
-    title: "About",
-    href: "/about",
-    icon: "bi bi-people",
-  },
 ];
 
 const Sidebar = () => {
@@ -77,9 +69,6 @@ const Sidebar = () => {
         <Nav vertical className="sidebarNav">
           {navigation.map((navi, index) => (
             <NavItem key={index} className="sidenav-bg">
-         
-            
-              
               <Link
                 to={navi.href}
                 className={
@@ -91,7 +80,6 @@ const Sidebar = () => {
                 <i className={navi.icon}></i>
                 <span className="ms-3 d-inline-block">{navi.title}</span>
               </Link>
-
             </NavItem>
           ))}
           <Button

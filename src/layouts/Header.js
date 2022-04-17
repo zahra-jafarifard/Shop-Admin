@@ -64,24 +64,30 @@ const Header = () => {
       <Collapse navbar isOpen={isOpen}>
         <Nav className="me-auto" navbar>
           <NavItem>
-            <Link to="/starter" className="nav-link">
-              Starter
+            <Link to="/users" className="nav-link">
+              Users
             </Link>
           </NavItem>
           <NavItem>
-            <Link to="/about" className="nav-link">
-              About
+            <Link to="/products" className="nav-link">
+              Products
             </Link>
           </NavItem>
+          
           <UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
-              DD Menu
+              Rolls
             </DropdownToggle>
             <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
+                <Link to="/rolls" className="nav-link">
+              <DropdownItem>Rolls</DropdownItem>
+                </Link>
+
               <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
+              
+                <Link to="/categories" className="nav-link">
+                  <DropdownItem>Category</DropdownItem>
+                </Link>
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
@@ -104,7 +110,7 @@ const Header = () => {
             </NavItem>
 
             <NavItem style={{ margin: '-10px -15px -12px -15px' }}>
-              <Link to={'/edit-user/?userId=6254477242a4797d06e7b652'} className="nav-link">
+              <Link to={'/edit-user/?userId=625c400c2cdb899849246da4'} className="nav-link">
                 <DropdownItem>Edit Profile</DropdownItem>
               </Link>
             </NavItem>

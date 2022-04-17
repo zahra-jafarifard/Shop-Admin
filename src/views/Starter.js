@@ -5,24 +5,23 @@ import SalesChart from "../components/dashboard/SalesChart";
 import Feeds from "../components/dashboard/Feeds";
 import styles from '../pages/products/product.module.css'
 import Blog from "../pages/products/Blog";
-
+import { fetchDataFunction } from '../shared/FetchData';
 
 const Starter = () => {
   const [productState, setProductState] = useState([]);
-  useEffect(() => {
 
-    return fetch('http://localhost:5000/products',)
-      .then(res => {
-        return res.json()
-      })
-      .then(_products => {
-        setProductState(_products.products)
-      })
-      .catch(err => {
-        console.log(err)
-      });
 
-  }, [])
+    useEffect(() => {
+      const fetchData = async () => {
+        const data = await fetchDataFunction('products');
+        setProductState(data);
+      }
+      fetchData();
+    }, [])
+
+
+
+
   return (
     <div>
       {/***Top Cards***/}

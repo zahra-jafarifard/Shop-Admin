@@ -1,7 +1,20 @@
+import React, { useState, useEffect } from "react";
+
 import { Card, CardBody, CardSubtitle, CardTitle } from "reactstrap";
 import Chart from "react-apexcharts";
+import { fetchDataFunction } from '../../shared/FetchData'
 
 const SalesChart = () => {
+  const [productState, setProductState] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchDataFunction('products');
+      setProductState(data);
+    }
+    fetchData();
+  }, [setProductState])
+  const users = productState.map(p => p.createdByUserId.name)
+
   const options = {
     chart: {
       toolbar: {
@@ -30,20 +43,15 @@ const SalesChart = () => {
     colors: ["#0d6efd", "#009efb", "#6771dc"],
     xaxis: {
       categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
+        "zahra",
+        "alireza",
+        "fati",
+       
       ],
     },
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 2,
         options: {
           plotOptions: {
             bar: {
@@ -58,11 +66,12 @@ const SalesChart = () => {
   const series = [
     {
       name: "2020",
-      data: [20, 40, 50, 30, 40, 50, 30, 30, 40],
+      data: [2 ,3 ,5],
     },
     {
       name: "2022",
-      data: [10, 20, 40, 60, 20, 40, 60, 60, 20],
+      data: [2, 2, 6],
+
     },
   ];
 

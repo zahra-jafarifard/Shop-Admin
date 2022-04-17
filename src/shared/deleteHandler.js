@@ -1,7 +1,6 @@
 export const Delete = () => {
 
     const deleteFunction = async (id, api, setStates) => {
-        // setShoWModal(false);
         let Data;
         let _response;
         try {

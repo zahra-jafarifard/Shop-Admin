@@ -22,14 +22,13 @@ const Profile = (props) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetchDataFunction('users/6254477242a4797d06e7b652')
+            const data = await fetchDataFunction('users/625c400c2cdb899849246da4')
             setUserState(data)
         }
         fetchData();
     }, [setUserState])
 
     const editHandler = (id) => {
-        console.log(id)
         navigate(`/edit-user/?userId=${id}`);
 
     }
@@ -41,7 +40,7 @@ const Profile = (props) => {
             <CardBody className="p-4">
                 <CardTitle tag="h5"><i style={{ fontSize: "24px" }} className="bi bi-file-earmark-person-fill"></i> Personal Informatin:</CardTitle>
                 <CardSubtitle></CardSubtitle>
-                <CardText className="mt-3">{userState.name}{userState.family}</CardText>
+                <CardText className="mt-3">{userState.name} {userState.family}</CardText>
                 <CardText className="mt-3">{userState.mobile}</CardText>
                 <CardText className="mt-3">{userState.email}</CardText>
                 {userState.products &&

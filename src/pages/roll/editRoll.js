@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
+import { Submit } from '../../shared/submitHandler';
+
 import {
     Card,
     Row,
@@ -41,10 +43,11 @@ const reducer = (state, action) => {
     }
 };
 
-const Forms = (props) => {
+const EditRoll = (props) => {
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { submitFunction } = Submit();
 
 
     useEffect(() => {
@@ -57,25 +60,30 @@ const Forms = (props) => {
     }, [dispatch, fetchDataFunction])
 
 
-    const submitHandler = () => {
+    const submitHandler = async () => {
         const _rollId = searchParams.get("rollId");
+        const _body = {
+            name: inputValue[0].name,
+        };
+        await submitFunction(`rolls/${_rollId}`, 'PATCH', _body);
+       navigate(-1)
 
-        fetch(`http://localhost:5000/rolls/${_rollId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: inputValue[0].name,
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                navigate('/rolls');
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        // fetch(`http://localhost:5000/rolls/${_rollId}`, {
+        //     method: 'PATCH',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         name: inputValue[0].name,
+        //     })
+        // })
+        //     .then(res => {
+        //         if (!res.ok) {
+        //             return new Error(res.message)
+        //         }
+        //         navigate('/rolls');
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
 
     }
 
@@ -83,11 +91,7 @@ const Forms = (props) => {
         let value = event.target.value;
         let name = event.target.name;
         dispatch({ type: "Change", name, value });
-
     };
-
-
-
     return (
         <Row style={{ width: "60%", margin: "auto", }}>
             <Col>
@@ -108,7 +112,6 @@ const Forms = (props) => {
                                     value={inputValue[0].name}
                                     onChange={changeHandler}
                                 />
-
                             </FormGroup>
                             <Button onClick={(e) => submitHandler(e)}>Submit</Button>
                         </Form>
@@ -119,5 +122,4 @@ const Forms = (props) => {
     );
 }
 
-
-export default Forms;
+export default EditRoll;

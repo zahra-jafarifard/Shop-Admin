@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
+import { Submit } from '../../shared/submitHandler';
 import {
     Card,
     Row,
@@ -49,11 +50,12 @@ const reducer = (state, action) => {
     }
 };
 
-const Forms = (props) => {
+const EditProduct = (props) => {
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const { submitFunction } = Submit()
 
 
     useEffect(() => {
@@ -66,28 +68,16 @@ const Forms = (props) => {
     }, [searchParams, dispatch])
 
 
-    const submitHandler = () => {
+    const submitHandler = async () => {
         const _productId = searchParams.get("productId");
-
-        fetch(`http://localhost:5000/products/${_productId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: inputValue[0].name,
-                price: inputValue[0].price,
-                description: inputValue[0].description,
-                // image: inputValue.image,
-            })
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                navigate('/products');
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        const _body = {
+            name: inputValue[0].name,
+            price: inputValue[0].price,
+            description: inputValue[0].description,
+            // image: inputValue.image,
+        };
+        await submitFunction(`products/${_productId}`, 'PATCH', _body);
+        navigate(-1);
     }
 
 
@@ -97,9 +87,6 @@ const Forms = (props) => {
         dispatch({ type: "Change", name, value });
 
     };
-
-
-
     return (
         <Row style={{ width: "60%", margin: "auto", }}>
             <Col>
@@ -108,7 +95,6 @@ const Forms = (props) => {
                         <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
                         EDIT PRODUCT
                     </CardTitle>
-
                     <CardBody >
                         <Form>
                             <FormGroup>
@@ -139,7 +125,6 @@ const Forms = (props) => {
                                     value={inputValue[0].description}
                                     onChange={changeHandler}
                                 />
-
                                 <Label for="file">File</Label>
                                 <Input id="images" name="images" type="file"
                                     value={inputValue[0].images}
@@ -157,5 +142,4 @@ const Forms = (props) => {
     );
 }
 
-
-export default Forms;
+export default EditProduct;

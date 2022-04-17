@@ -1,4 +1,4 @@
-export const fetchDataFunction = (api) => {
+export const fetchDataFunction = async (api) => {
     return fetch(`http://localhost:5000/${api}`)
         .then(res => {
             if (!res.ok) {

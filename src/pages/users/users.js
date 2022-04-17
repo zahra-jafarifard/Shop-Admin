@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Card, CardBody, CardTitle, CardSubtitle , Button } from "reactstrap";
+import { Card, CardBody, CardTitle, CardSubtitle, Button } from "reactstrap";
 import styles from './userTable.module.css';
 import Pagination from './pagination';
-import { Delete } from '../../shared/deleteHandler';
 import Modal from '../../shared/modal';
 
 const UserTables = () => {
@@ -15,27 +14,17 @@ const UserTables = () => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
   const navigate = useNavigate();
-  const { deleteFunction } = Delete()
-
 
   const editHandler = (id) => {
     navigate(`/edit-user/?userId=${id}`);
   }
 
-  const showModalHandler = (id , setData) => {
+  const showModalHandler = (id, setData) => {
     setShoWModal(true);
     setId(id);
   }
 
   const cancelHandler = () => { setShoWModal(false); }
-
-
-  // const deleteHandler = (id) => {
-  //   setShoWModal(false);
-  //   deleteFunction(id, 'users');
-  // }
-
-
 
   const addNewUserHandler = () => {
     navigate('/new-user');
@@ -48,7 +37,6 @@ const UserTables = () => {
   )
   return (
     <React.Fragment>
-
       {showModal && <Modal
         refToggle={modalRef}
         toggle
@@ -65,11 +53,11 @@ const UserTables = () => {
           <CardSubtitle className="mb-2 text-muted" tag="h6">
             Overview of the Users
           </CardSubtitle>
-          <Pagination editHandler={editHandler} 
-          showModalHandler={showModalHandler}
+          <Pagination editHandler={editHandler}
+            showModalHandler={showModalHandler}
             setShoWModal={setShoWModal}
             deleteRef={deleteRef}
-           />
+          />
         </CardBody>
       </Card>
     </React.Fragment>
