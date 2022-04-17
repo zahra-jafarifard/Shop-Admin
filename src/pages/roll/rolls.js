@@ -3,64 +3,38 @@ import { Card, CardBody, CardTitle, Table, Col, Row } from "reactstrap";
 import { useNavigate } from 'react-router-dom';
 
 import styles from './rollTable.module.css';
+import { Delete } from '../../shared/deleteHandler';
+import { fetchDataFunction } from '../../shared/FetchData';
 
-const UserTables = () => {
+const RollTables = () => {
 
     const [name, setName] = useState('');
     const [rollsState, setRollsState] = useState([]);
-
+    const { deleteFunction } = Delete();
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        return fetch('http://localhost:5000/rolls')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_rolls => {
-                setRollsState(_rolls.rolls)
-            })
-            .catch(err => {
-                console.log(err)
-            });
+        const fetchData = async () => {
+            const data = await fetchDataFunction('rolls')
+            setRollsState(data)
+        }
+        fetchData();
+    }, [setRollsState, fetchDataFunction])
 
-    }, [setRollsState])
 
     const editHandler = (id) => {
         navigate(`/edit-roll/?rollId=${id}`);
     }
 
-
     const deleteHandler = (id) => {
-
-        if (window.confirm("ARE YOU SURE?") === true) {
-            setRollsState(prevRoll => prevRoll.filter(roll => roll._id.toString() !== id))
-            fetch(`http://localhost:5000/rolls/${id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-            })
-                .then(res => {
-                    if (!res.ok) {
-                        return new Error(res.message)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        } else {
-            return;
-        }
-
+        // setShoWModal(false);
+        deleteFunction(id, 'rolls', setRollsState);
     }
-
 
     const addNewUserHandler = () => {
         navigate('/new-roll');
     }
-
 
     return (
         <div>
@@ -70,11 +44,7 @@ const UserTables = () => {
                         <CardTitle tag="h6" className="border-bottom p-3 mb-0">
                             <i className="bi bi-card-text me-2"> </i>
                             List Of Rolls
-                        </CardTitle>
-                        <CardTitle title='Add New Roll'
-                            className={styles.addNew}
-                            onClick={addNewUserHandler} >
-                            <i className="bi bi-bookmark-plus-fill"></i>
+                            <i title='Add New Roll' onClick={addNewUserHandler} className={`bi bi-bookmark-plus-fill ${styles.addNew}`}></i>
                         </CardTitle>
                         <CardBody className="">
                             <Table bordered hover>
@@ -99,10 +69,7 @@ const UserTables = () => {
                                             </td>
                                         </tr>
                                     ))}
-
-
                                 </tbody>
-
                             </Table>
                         </CardBody>
                     </Card>
@@ -112,4 +79,4 @@ const UserTables = () => {
     );
 };
 
-export default UserTables;
+export default RollTables;

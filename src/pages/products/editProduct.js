@@ -2,6 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
+import { fetchDataFunction } from '../../shared/FetchData';
 import {
     Card,
     Row,
@@ -19,7 +20,7 @@ import {
 const initialState = [
     {
         name: '', price: '', description: '', images: [],
-        
+
     }]
 
 
@@ -28,17 +29,19 @@ const reducer = (state, action) => {
     switch (action.type) {
         case "Change":
             return state.map((data) => {
-                return { ...data, [action.name]: action.value };
-
+                return {
+                    ...data,
+                    [action.name]: action.value
+                };
             });
         case "FetchProduct":
             return state.map((data) => {
                 return {
                     ...data,
-                    name: action._product.name,
-                    price: action._product.price,
-                    description: action._product.description,
-                    // images: action._product.images,
+                    name: action.data.name,
+                    price: action.data.price,
+                    description: action.data.description,
+                    // images: action.data.images,
                 };
             });
         default:
@@ -55,21 +58,12 @@ const Forms = (props) => {
 
     useEffect(() => {
         const _productId = searchParams.get("productId");
-        return fetch(`http://localhost:5000/products/${_productId}`)
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(product => {
-                const _product = product.product;
-                dispatch({ type:"FetchProduct", _product });
-            }).catch(err => {
-                console.log(err);
-            })
-
-    }, [searchParams, dispatch])
+        const fetchData = async () => {
+            const data = await fetchDataFunction(`products/${_productId}`)
+            dispatch({ type: "FetchProduct", data });
+        }
+        fetchData();
+    }, [searchParams, dispatch, fetchDataFunction])
 
 
     const submitHandler = () => {
@@ -117,8 +111,6 @@ const Forms = (props) => {
 
                     <CardBody >
                         <Form>
-                            {/* {console.log(inputValue[0].getRollsState)} */}
-                            {/* {console.log(inputValue)} */}
                             <FormGroup>
                                 <Label for="name">Name</Label>
                                 <Input

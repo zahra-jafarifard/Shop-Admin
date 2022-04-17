@@ -1,5 +1,7 @@
 import React from 'react';
 import { withRouter } from '../../shared/withRouter';
+
+import { fetchDataFunction } from '../../shared/FetchData';
 import {
     Card,
     Row,
@@ -24,23 +26,12 @@ class Forms extends React.Component {
         }
     }
 
-
     componentDidMount = () => {
-        return fetch('http://localhost:5000/categories/parents')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_parents => {
-                this.setState({ getParentCategoriesState: _parents.parents }, () => {
-                    console.log(_parents.parents)
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        const fetchData = async () => {
+            const data = await fetchDataFunction('categories/parents')
+            this.setState({ getParentCategoriesState: data })
+        }
+        fetchData();
     }
 
     submitHandler = () => {

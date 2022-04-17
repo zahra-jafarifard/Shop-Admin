@@ -1,7 +1,8 @@
 import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useSearchParams } from "react-router-dom";
+
+import { fetchDataFunction } from '../../shared/FetchData';
 import {
     Card,
     Row,
@@ -23,12 +24,10 @@ const initialState = [
 
 
 const reducer = (state, action) => {
-    console.log(state, action)
     switch (action.type) {
         case "Change":
             return state.map((data) => {
                 return { ...data, [action.name]: action.value };
-
             });
         case "FetchRoll":
             return state.map((data) => {
@@ -44,37 +43,21 @@ const reducer = (state, action) => {
 
 const Forms = (props) => {
     const [inputValue, dispatch] = useReducer(reducer, initialState);
-
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
 
-
-
     useEffect(() => {
         const _rollId = searchParams.get("rollId");
-        console.log(_rollId)
+        const fetchData = async () => {
+            const data = await fetchDataFunction(`rolls/${_rollId}`)
+            return dispatch({ type: "FetchRoll", _roll: data });
+        }
+        fetchData();
+    }, [dispatch, fetchDataFunction])
 
-        return fetch(`http://localhost:5000/rolls/${_rollId}`)
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(roll => {
-                return dispatch({
-                    type: "FetchRoll", _roll: roll.roll
-                });
-            })
-            .catch(err => {
-                console.log(err)
-            })
 
-    }, [dispatch])
-
-    const submitHandler = (event) => {
-        // event.preventDefault();
+    const submitHandler = () => {
         const _rollId = searchParams.get("rollId");
 
         fetch(`http://localhost:5000/rolls/${_rollId}`, {
@@ -113,11 +96,8 @@ const Forms = (props) => {
                         <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
                         EDIT ROLL
                     </CardTitle>
-
                     <CardBody >
                         <Form>
-                            {/* {console.log(inputValue[0].getRollsState)} */}
-                            {console.log(inputValue)}
                             <FormGroup>
                                 <Label for="name">Name</Label>
                                 <Input
@@ -128,7 +108,7 @@ const Forms = (props) => {
                                     value={inputValue[0].name}
                                     onChange={changeHandler}
                                 />
-                             
+
                             </FormGroup>
                             <Button onClick={(e) => submitHandler(e)}>Submit</Button>
                         </Form>

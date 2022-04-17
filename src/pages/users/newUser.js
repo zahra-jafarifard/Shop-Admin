@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { fetchDataFunction } from '../../shared/FetchData';
 import { withRouter } from '../../shared/withRouter';
 import {
     Card,
@@ -14,7 +16,7 @@ import {
     FormText,
 } from "reactstrap";
 
-class Forms extends React.Component {
+class NewUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,25 +26,14 @@ class Forms extends React.Component {
     }
 
     componentDidMount = () => {
-        return fetch('http://localhost:5000/rolls')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_rolls => {
-                this.setState({ getRollsState: _rolls.rolls }, () => {
-                    console.log(_rolls.rolls)
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        const fetchData = async () => {
+            const data = await fetchDataFunction('rolls')
+            this.setState({ getRollsState: data })
+        }
+        fetchData();
     }
 
     submitHandler = () => {
-
         fetch('http://localhost:5000/users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -65,7 +56,6 @@ class Forms extends React.Component {
             .catch(err => {
                 console.log(err)
             })
-
     }
 
     changeHandler = (event) => {
@@ -74,9 +64,7 @@ class Forms extends React.Component {
         this.setState({ [name]: value });
     };
 
-
     render() {
-
         return (
             <Row style={{ width: "60%", margin: "auto", }}>
                 <Col>
@@ -85,7 +73,6 @@ class Forms extends React.Component {
                             <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
                             ADD NEW USER
                         </CardTitle>
-
                         <CardBody >
                             <Form>
                                 <FormGroup>
@@ -136,7 +123,6 @@ class Forms extends React.Component {
                                     />
                                     <Label for="roll">Roll</Label>
                                     <Input id="roll" name="roll" type="select"
-
                                         onChange={this.changeHandler}
                                     >
                                         <option defaultChecked>Choose Roll</option>
@@ -151,7 +137,7 @@ class Forms extends React.Component {
                                         ADD YOUR PHOTO...
                                     </FormText>
                                 </FormGroup>
-                                <Button onClick={this.submitHandler}>Submit</Button>
+                                <Button onClick={this.submitHandler}>ADD</Button>
                             </Form>
                         </CardBody>
                     </Card>
@@ -160,4 +146,4 @@ class Forms extends React.Component {
         );
     };
 }
-export default withRouter(Forms);
+export default withRouter(NewUser);

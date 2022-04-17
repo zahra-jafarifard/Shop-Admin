@@ -1,7 +1,8 @@
 import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useSearchParams } from "react-router-dom";
+
+import { fetchDataFunction } from '../../shared/FetchData';
 import {
     Card,
     Row,
@@ -25,7 +26,6 @@ const initialState = [
 
 
 const reducer = (state, action) => {
-    console.log(state, action)
     switch (action.type) {
         case "Change":
             return state.map((data) => {
@@ -60,43 +60,21 @@ const Forms = (props) => {
 
 
     useEffect(() => {
-        return fetch('http://localhost:5000/categories/parents')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_parents => {
-                // console.log(_parents.parents)
-                dispatch({ type: "FetchParents", _parents: _parents.parents });
-
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-    }, [dispatch])
+        const fetchData = async () => {
+            const data = await fetchDataFunction('categories/parents')
+            dispatch({ type: "FetchParents", _parents: data });
+        }
+        fetchData();
+    }, [dispatch, fetchDataFunction])
 
     useEffect(() => {
         const _categoryId = searchParams.get("categoryId");
-
-        return fetch(`http://localhost:5000/categories/${_categoryId}`)
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_category => {
-                dispatch({ type: "FetchCategory", category: _category.category });
-
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-    }, [dispatch])
+        const fetchData = async () => {
+            const data = await fetchDataFunction(`categories/${_categoryId}`)
+            dispatch({ type: "FetchCategory", category: data });
+        }
+        fetchData();
+    }, [dispatch, fetchDataFunction])
 
 
     const submitHandler = () => {
@@ -109,17 +87,15 @@ const Forms = (props) => {
                 name: inputValue[0].name,
                 parentId: inputValue[0].parent,
             })
+        }).then((res) => {
+            if (!res.ok) {
+                return new Error(res.message)
+            }
+            navigate('/categories');
         })
-            .then((res) => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                navigate('/categories');
-            })
             .catch(err => {
                 console.log(err)
             })
-
     }
 
     const changeHandler = (event) => {
@@ -128,8 +104,6 @@ const Forms = (props) => {
         dispatch({ type: "Change", name, value });
 
     };
-
-
 
     return (
         <Row style={{ width: "60%", margin: "auto", }}>
@@ -142,8 +116,6 @@ const Forms = (props) => {
 
                     <CardBody >
                         <Form>
-                            {/* {console.log(inputValue[0].getRollsState)} */}
-                            {console.log(inputValue)}
                             <FormGroup>
                                 <Label for="name">Name</Label>
                                 <Input

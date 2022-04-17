@@ -1,40 +1,59 @@
-import React from 'react';
-// import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { fetchDataFunction } from '../../shared/FetchData';
+import {
+    Card,
+    CardBody,
+    CardImg,
+    CardSubtitle,
+    CardText,
+    CardTitle,
+    Button,
+} from "reactstrap";
 import * as styles from './profile.module.css'
 import user1 from "../../assets/images/users/user1.jpg";
-import { Button } from 'reactstrap';
 
-const Profile = () => {
 
-    // const navigate = useNavigate();
+const Profile = (props) => {
 
-    const editHandler = (id) =>{
-        // navigate(`/edit-user/?userId=${id}`);
-    
+    const [userState, setUserState] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchDataFunction('users/6254477242a4797d06e7b652')
+            setUserState(data)
+        }
+        fetchData();
+    }, [setUserState])
+
+    const editHandler = (id) => {
+        console.log(id)
+        navigate(`/edit-user/?userId=${id}`);
+
     }
 
     return (
-        <div className={styles.Card}>
-            <div className={styles.Image}>
-                <img
-                    src={user1}
-                    alt="profile"
-                    className="rounded-circle"
-                    width="210"
-                    height="210"
-                ></img>
-            </div>
-            <div className={styles.body}>
-                <label>Zahra Jafarifar</label><br/>
-                <label>09353140175</label><br/>
-                <label>jafarifardz@gmail.com</label><br/>
-            </div>
-            <div  className={styles.submit}>
 
-            <Button onClick={(id) => editHandler(id)} >EDIT</Button>
-            </div>
-        </div>
+        <Card>
+            <CardImg alt="Card image cap" src={user1} className={styles.Image} />
+            <CardBody className="p-4">
+                <CardTitle tag="h5"><i style={{ fontSize: "24px" }} class="bi bi-file-earmark-person-fill"></i> Personal Informatin:</CardTitle>
+                <CardSubtitle></CardSubtitle>
+                <CardText className="mt-3">{userState.name}{userState.family}</CardText>
+                <CardText className="mt-3">{userState.mobile}</CardText>
+                <CardText className="mt-3">{userState.email}</CardText>
+                {userState.products &&
+                    <CardText className="mt-3">I add {userState.products.length == 0 ? 'zero' : userState.products.length} Products</CardText>}
+                <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <Button color={props.color} onClick={() => editHandler(userState.id)}> Edit </Button>
+                </div>
+
+            </CardBody>
+        </Card>
+
+
     )
 };
 

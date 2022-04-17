@@ -1,7 +1,8 @@
 import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useSearchParams } from "react-router-dom";
+
+import { fetchDataFunction } from '../../shared/FetchData';
 import {
     Card,
     Row,
@@ -30,35 +31,30 @@ const initialState = [
 
 
 const reducer = (state, action) => {
-    // console.log(state, action)
     switch (action.type) {
         case "Change":
             return state.map((data) => {
                 return { ...data, [action.name]: action.value };
-
             });
         case "SetRoll":
-            // const data = state[0].getRollsState.concat(action._rolls)
             console.log(action._rolls)
             return state.map((data) => {
                 return {
                     ...data,
                     getRollsState: action._rolls
-
                 };
-
             });
         case "FetchUser":
             return state.map((data) => {
                 return {
                     ...data,
-                    name: action._user.name,
-                    family: action._user.family,
-                    mobile: action._user.mobile,
-                    email: action._user.email,
-                    password: action._user.password,
-                    image: action._user.image,
-                    roll: action._user.rollId,
+                    name: action.data.name,
+                    family: action.data.family,
+                    mobile: action.data.mobile,
+                    email: action.data.email,
+                    password: action.data.password,
+                    image: action.data.image,
+                    roll: action.data.rollId,
                 };
             });
         default:
@@ -66,55 +62,31 @@ const reducer = (state, action) => {
     }
 };
 
-const Forms = (props) => {
-    const [inputValue, dispatch] = useReducer(reducer, initialState);
+const EditUser = (props) => {
 
+    const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
 
-
     useEffect(() => {
         const _userId = searchParams.get("userId");
-
-        return fetch(`http://localhost:5000/users/${_userId}`)
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json();
-            })
-            .then(user => {
-                const _user = user.user;
-                dispatch({ type: "FetchUser", _user });
-            }).catch(err => {
-                console.log(err);
-
-            })
-
-    }, [searchParams, dispatch])
+        const fetchData = async () => {
+            const data = await fetchDataFunction(`users/${_userId}`)
+            dispatch({ type: "FetchUser", data });
+        }
+        fetchData();
+    }, [searchParams, dispatch, fetchDataFunction])
 
     useEffect(() => {
-        return fetch('http://localhost:5000/rolls')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json();
-            })
-            .then(rolls => {
-                return dispatch({
-                    type: "SetRoll", _rolls: rolls.rolls
-                });
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        const fetchData = async () => {
+            const data = await fetchDataFunction('rolls')
+            dispatch({ type: "SetRoll", _rolls: data });
+        }
+        fetchData();
+    }, [dispatch, fetchDataFunction])
 
-    }, [dispatch])
-
-    const submitHandler = (event) => {
-        // event.preventDefault();
+    const submitHandler = () => {
         const _userId = searchParams.get("userId");
 
         fetch(`http://localhost:5000/users/${_userId}`, {
@@ -134,22 +106,18 @@ const Forms = (props) => {
                 if (!res.ok) {
                     return new Error(res.message)
                 }
-                navigate('/users');
+                navigate(-1); //goBack
             })
             .catch(err => {
                 console.log(err)
             })
-
     }
 
     const changeHandler = (event) => {
         let value = event.target.value;
         let name = event.target.name;
         dispatch({ type: "Change", name, value });
-
     };
-
-
 
     return (
         <Row style={{ width: "60%", margin: "auto", }}>
@@ -159,11 +127,8 @@ const Forms = (props) => {
                         <i style={{ fontSize: '23px' }} className="bi bi-person me-2"> </i>
                         EDIT USER
                     </CardTitle>
-
                     <CardBody >
                         <Form>
-                            {/* {console.log(inputValue[0].getRollsState)} */}
-                            {console.log(inputValue)}
                             <FormGroup>
                                 <Label for="name">Name</Label>
                                 <Input
@@ -223,8 +188,6 @@ const Forms = (props) => {
                                         </Input>
                                     </div>
                                 }
-
-
                                 <Label for="file">File</Label>
                                 <Input id="image" name="image" type="file"
                                     value={inputValue.image}
@@ -233,7 +196,7 @@ const Forms = (props) => {
                                     ADD NEW PHOTO...
                                 </FormText>
                             </FormGroup>
-                            <Button onClick={(e) => submitHandler(e)}>Submit</Button>
+                            <Button onClick={(e) => submitHandler(e)}>EDIT</Button>
                         </Form>
                     </CardBody>
                 </Card>
@@ -242,5 +205,4 @@ const Forms = (props) => {
     );
 }
 
-
-export default Forms;
+export default EditUser;

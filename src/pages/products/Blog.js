@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Delete } from '../../shared/deleteHandler';
 import {
   Card,
   CardBody,
@@ -14,32 +15,15 @@ import {
 const Blog = (props) => {
 
   const navigate = useNavigate();
+  const { deleteFunction } = Delete()
 
+  
   const editHandler = (id) => {
     navigate(`/edit-product/?productId=${id}`);
   }
 
   const deleteHandler = (id) => {
-    if (window.confirm("ARE YOU SURE?") === true) {
-
-      props.setProductState(prevUser => prevUser.filter(product => product._id.toString() !== id))
-      fetch(`http://localhost:5000/products/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then(res => {
-          if (!res.ok) {
-            return new Error(res.message)
-          }
-          return res.json()
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } else {
-      return;
-    }
-
+    deleteFunction(id, 'products', props.setProductState)
   }
 
   return (

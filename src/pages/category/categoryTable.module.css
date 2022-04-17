@@ -1,9 +1,6 @@
 .addNew{
     font-size: 25px;
     position: relative;
-    float: left;
-    top: -44px ;
-    right: px; 
-    left: 94%;
+    float: right;
     /* border: 2px red solid; */
 }

@@ -4,31 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import { Row, Col } from "reactstrap";
 import Blog from "./Blog";
 import styles from './product.module.css'
-
+import { fetchDataFunction } from '../../shared/FetchData';
 
 const Cards = () => {
-    const navigate = useNavigate()
-    const [productState, setProductState] = useState([]);
-    useEffect(() => {
-        return fetch('http://localhost:5000/products')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_products => {
-                setProductState(_products.products)
-            })
-            .catch(err => {
-                console.log(err)
-            });
 
+    const [productState, setProductState] = useState([]);
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchDataFunction('products')
+            setProductState(data)
+        }
+        fetchData();
     }, [])
+
 
     const addNewProductHandler = () => {
         navigate('/new-product');
     }
+    
     return (
         <div>
             <h5 className="mb-3">All Products</h5>

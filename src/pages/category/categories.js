@@ -1,86 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardBody, CardTitle, Table, Col, Row } from "reactstrap";
+import React, { useState, useEffect, useRef , useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+import { Card, CardBody, CardTitle, Table, Col, Row, Button } from "reactstrap";
 import styles from './categoryTable.module.css';
+import { Delete } from '../../shared/deleteHandler';
+import Modal from '../../shared/modal';
+import { fetchDataFunction } from '../../shared/FetchData';
 
-const UserTables = () => {
+const CategoryTables = (props) => {
 
-    // const [name, setName] = useState('');
-    // const [parentId, setParentId] = useState('');
+    const [showModal, setShoWModal] = useState(false);
     const [categoriesState, setCategoriesState] = useState([]);
-
-
+    const modalRef = useRef(null);
+    const deleteCategoryRef = useRef();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        return fetch('http://localhost:5000/categories')
-            .then(res => {
-                if (!res.ok) {
-                    return new Error(res.message)
-                }
-                return res.json()
-            })
-            .then(_categories => {
-                // console.log(_categories)
-                return setCategoriesState(_categories.categories)
-            })
-            .catch(err => {
-                console.log(err)
-            });
+    const { deleteFunction } = Delete();
 
-    }, [setCategoriesState])
+    useEffect(() => {
+        const fetchData = async () =>{
+        const data= await fetchDataFunction('categories')
+            setCategoriesState(data)
+        }
+        fetchData();
+    }, [setCategoriesState , fetchDataFunction])
 
     const editHandler = (id) => {
         navigate(`/edit-category/?categoryId=${id}`);
     }
 
-
-    const deleteHandler = async (id) => {
-        let _deletedItem;
-        let _response;
-
-        if (window.confirm("ARE YOU SURE?") === true) {
-            try {
-                _deletedItem = await fetch(`http://localhost:5000/categories/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                })
-                _response = await _deletedItem.json();
-                if (!_deletedItem.ok) {
-                    return new Error(_response);
-                }
-                else {
-                    return await setCategoriesState(prevCategory => prevCategory.filter(category => category._id.toString() !== id))
-                }
-            } catch (error) {
-                return new Error(error.message)
-            }
-        } else {
-            return;
-        }
-
+    const showModalHandler = () => {
+        setShoWModal(true);
     }
 
+    const deleteHandler = async (id) => {
+        setShoWModal(false);
+        deleteFunction(id, 'categories', setCategoriesState);
+    }
 
-    const addNewUserHandler = () => {
+    const cancelHandler = () => {
+        setShoWModal(false);
+    }
+
+    const addNewHandler = (props) => {
         navigate('/new-category');
     }
 
-
+    const footer = (
+        <div>
+            <Button color="primary" onClick={() => deleteHandler(deleteCategoryRef.current.title)}>Yes</Button>
+            <Button color="secondary" onClick={cancelHandler}> No</Button>
+        </div>
+    )
     return (
         <div>
+
+            {showModal && <Modal
+                refToggle={modalRef}
+                toggle
+                header='DELETE'
+                body='Do you want to delete?'
+                footer={footer}
+            />}
+
             <Row>
                 <Col lg="12">
                     <Card>
                         <CardTitle tag="h6" className="border-bottom p-3 mb-0">
                             <i className="bi bi-card-text me-2"> </i>
                             List Of Categories
-                        </CardTitle>
-                        <CardTitle title='Add New Category'
-                            className={styles.addNew}
-                            onClick={addNewUserHandler} >
-                            <i className="bi bi-bookmark-plus-fill"></i>
+                            <i onClick={addNewHandler} className={`bi bi-bookmark-plus-fill ${styles.addNew}`}></i>
                         </CardTitle>
                         <CardBody className="">
                             <Table bordered hover>
@@ -104,16 +94,13 @@ const UserTables = () => {
                                                 <span onClick={() => editHandler(tdata._id)}>
                                                     <i title='Edit' className="bi bi-pencil-square"></i>
                                                 </span>
-                                                <span onClick={() => deleteHandler(tdata._id.toString())}>
+                                                <span style={{ zIndex: '33' }} title={tdata._id} onClick={showModalHandler} ref={deleteCategoryRef} >
                                                     <i title='Delete' className="bi bi-x-square" ></i>
                                                 </span>
                                             </td>
                                         </tr>
                                     ))}
-
-
                                 </tbody>
-
                             </Table>
                         </CardBody>
                     </Card>
@@ -123,4 +110,4 @@ const UserTables = () => {
     );
 };
 
-export default UserTables;
+export default CategoryTables;
