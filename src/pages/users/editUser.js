@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
@@ -33,7 +33,15 @@ const initialState = [
 
 
 const reducer = (state, action) => {
+    console.log(state, action)
     switch (action.type) {
+        case "FetchImage":
+            return state.map((data) => {
+                return { 
+                    ...data, 
+                    image:action.file.name
+                };
+            });
         case "Change":
             return state.map((data) => {
                 return { ...data, [action.name]: action.value };
@@ -67,6 +75,7 @@ const EditUser = (props) => {
 
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
+    // const [image , setImage] = useState('')
     const navigate = useNavigate();
 
     const { submitFunction } = Submit();
@@ -90,42 +99,30 @@ const EditUser = (props) => {
 
     const submitHandler =async () => {
         const _userId = searchParams.get("userId");
-        const _body = {
-            name: inputValue[0].name,
-            family: inputValue[0].family,
-            mobile: inputValue[0].mobile,
-            email: inputValue[0].email,
-            password: inputValue[0].password,
-            roll: inputValue[0].roll,
-                // image: inputValue.image,
-        };
-        await submitFunction(`users/${_userId}`, 'PATCH', _body);
+
+        const formm =  new FormData();
+        formm.append("name", inputValue[0].name);
+        formm.append('family', inputValue[0].family);
+        formm.append('mobile', inputValue[0].mobile);
+        formm.append('email', inputValue[0].email);
+        formm.append('password', inputValue[0].password);
+        formm.append('roll', inputValue[0].roll);
+        formm.append('image', inputValue[0].image);
+        
+        await submitFunction(`users/${_userId}`, 'PATCH', formm);
         navigate(-1);
 
-        // fetch(`http://localhost:5000/users/${_userId}`, {
-        //     method: 'PATCH',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         name: inputValue[0].name,
-        //         family: inputValue[0].family,
-        //         mobile: inputValue[0].mobile,
-        //         email: inputValue[0].email,
-        //         password: inputValue[0].password,
-        //         roll: inputValue[0].roll,
-        //         // image: inputValue.image,
-        //     })
-        // })
-        //     .then(res => {
-        //         if (!res.ok) {
-        //             return new Error(res.message)
-        //         }
-        //         navigate(-1); //goBack
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
     }
-
+    const fileHandler = (e) => {
+        let file = e.target.files[0];
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            dispatch({ type: "FetchImage", file});
+            console.log("state file front", file);
+;
+        };
+        fileReader.readAsDataURL(file);
+    };
     const changeHandler = (event) => {
         let value = event.target.value;
         let name = event.target.name;
@@ -203,8 +200,8 @@ const EditUser = (props) => {
                                 }
                                 <Label for="file">File</Label>
                                 <Input id="image" name="image" type="file"
-                                    value={inputValue.image}
-                                    onChange={changeHandler} />
+                                    // value={inputValue[0].image}
+                                    onChange={fileHandler} />
                                 <FormText>
                                     ADD NEW PHOTO...
                                 </FormText>

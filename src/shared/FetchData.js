@@ -7,6 +7,7 @@ export const fetchDataFunction = async (api) => {
             return res.json()
         })
         .then(data => {
+            console.log(data)
             return (data.fetchData)
         })
         .catch(err => {

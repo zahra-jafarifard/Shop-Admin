@@ -38,46 +38,36 @@ class NewUser extends React.Component {
     }
 
     submitHandler = async () => {
-        const _body = {
-            name: this.state.name,
-            family: this.state.family,
-            mobile: this.state.mobile,
-            email: this.state.email,
-            password: this.state.password,
-            image: this.state.image,
-            roll: this.state.roll,
-        };
+
+        const _body = new FormData();
+        _body.append('name', this.state.name);
+        _body.append('family', this.state.family);
+        _body.append('mobile', this.state.mobile);
+        _body.append('email', this.state.email);
+        _body.append('password', this.state.password);
+        _body.append('roll', this.state.roll);
+        _body.append('image', this.state.image);
+
         await submitFunction('users', 'POST', _body);
         this.props.navigate(-1)
-
-        // fetch('http://localhost:5000/users', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         name: this.state.name,
-        //         family: this.state.family,
-        //         mobile: this.state.mobile,
-        //         email: this.state.email,
-        //         password: this.state.password,
-        //         image: this.state.image,
-        //         roll: this.state.roll,
-        //     })
-        // })
-        //     .then(res => {
-        //         if (!res.ok) {
-        //             return new Error(res.message)
-        //         }
-        //         this.props.navigate('/users')
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
+        
     }
 
     changeHandler = (event) => {
         let value = event.target.value;
         let name = event.target.name;
         this.setState({ [name]: value });
+    };
+    fileHandler = (e) => {
+        let file = e.target.files[0];
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            this.setState({ image: file }, () => {
+                // this.setState({ image: file, preview: fileReader.result }, () => {
+                console.log("state file front", this.state.image);
+            });
+        };
+        fileReader.readAsDataURL(file);
     };
 
     render() {
@@ -142,13 +132,15 @@ class NewUser extends React.Component {
                                         onChange={this.changeHandler}
                                     >
                                         <option defaultChecked>Choose Roll</option>
-                                        {this.state.getRollsState.map((roll, index) => {
+
+                                        {this.state.getRollsState?.map((roll, index) => {
                                             return <option key={index} value={roll._id.toString()}>{roll.name}</option>
                                         })}
                                     </Input>
                                     <Label for="file">File</Label>
-                                    <Input id="file" name="file" type="file" value={this.state.image}
-                                        onChange={this.changeHandler} />
+                                    <Input id="image" name="image" type="file"
+                                        // value={this.state.image}
+                                        onChange={this.fileHandler} />
                                     <FormText>
                                         ADD YOUR PHOTO...
                                     </FormText>

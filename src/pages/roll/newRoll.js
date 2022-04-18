@@ -27,10 +27,11 @@ class NewRoll extends React.Component {
 
 
     submitHandler = async () => {
-        const _body = {
+        
+        const _body = JSON.stringify({
             name: this.state.name,
-        };
-        await submitFunction('rolls', 'POST', _body);
+        });
+        await submitFunction('rolls', 'POST', _body, true);
         this.props.navigate(-1)
     }
 

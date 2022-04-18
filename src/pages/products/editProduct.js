@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect , useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
@@ -20,7 +20,7 @@ import {
 
 const initialState = [
     {
-        name: '', price: '', description: '', images: [],
+        name: '', price: '', description: '', image: '',
 
     }]
 
@@ -42,7 +42,7 @@ const reducer = (state, action) => {
                     name: action.data.name,
                     price: action.data.price,
                     description: action.data.description,
-                    // images: action.data.images,
+                    image: action.data.image,
                 };
             });
         default:
@@ -53,6 +53,7 @@ const reducer = (state, action) => {
 const EditProduct = (props) => {
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [image , setImage] = useState('')
     const navigate = useNavigate();
 
     const { submitFunction } = Submit()
@@ -70,16 +71,27 @@ const EditProduct = (props) => {
 
     const submitHandler = async () => {
         const _productId = searchParams.get("productId");
-        const _body = {
-            name: inputValue[0].name,
-            price: inputValue[0].price,
-            description: inputValue[0].description,
-            // image: inputValue.image,
-        };
+        const _body = new FormData();
+        _body.append('name', inputValue[0].name);
+        _body.append('price', inputValue[0].price);
+        _body.append('description', inputValue[0].description);
+        _body.append('image', inputValue[0].image);
+
         await submitFunction(`products/${_productId}`, 'PATCH', _body);
         navigate(-1);
     }
-
+    const fileHandler = (e) => {
+        let file = e.target.files[0];
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            setImage(file)
+            // this.setState({ image: file }, () => {
+                // this.setState({ image: file, preview: fileReader.result }, () => {
+                console.log("state file front",image);
+            // });
+        };
+        fileReader.readAsDataURL(file);
+    };
 
     const changeHandler = (event) => {
         let value = event.target.value;
@@ -126,9 +138,8 @@ const EditProduct = (props) => {
                                     onChange={changeHandler}
                                 />
                                 <Label for="file">File</Label>
-                                <Input id="images" name="images" type="file"
-                                    value={inputValue[0].images}
-                                    onChange={changeHandler} />
+                                <Input id="image" name="image" type="file"
+                                    onChange={fileHandler} />
                                 <FormText>
                                     ADD NEW PHOTO...
                                 </FormText>

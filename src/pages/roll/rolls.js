@@ -6,10 +6,12 @@ import styles from './rollTable.module.css';
 import { Delete } from '../../shared/deleteHandler';
 import { fetchDataFunction } from '../../shared/FetchData';
 import Modal from '../../shared/modal';
+import Loader from '../../layouts/loader/Loader';
 const RollTables = () => {
 
     const [rollsState, setRollsState] = useState([]);
     const [showModal, setShoWModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [id, setId] = useState();
     const modalRef = useRef(null);
 
@@ -18,9 +20,12 @@ const RollTables = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setLoading(true)
         const fetchData = async () => {
-            const data = await fetchDataFunction('rolls')
-            setRollsState(data)
+            const data = await fetchDataFunction('rolls');
+            setRollsState(data);
+            setLoading(false)
+
         }
         fetchData();
     }, [setRollsState])
@@ -52,6 +57,7 @@ const RollTables = () => {
     )
     return (
         <React.Fragment>
+            {loading && <Loader />}
             {showModal && <Modal
                 refToggle={modalRef}
                 toggle
@@ -75,6 +81,7 @@ const RollTables = () => {
                                         <th style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }} >Actions</th >
                                     </tr>
                                 </thead>
+                                {rollsState && !loading &&
                                 <tbody>
                                     {rollsState.map((tdata, index) => (
                                         <tr key={index} className="border-top">
@@ -89,7 +96,7 @@ const RollTables = () => {
                                             </td>
                                         </tr>
                                     ))}
-                                </tbody>
+                                </tbody>}
                             </Table>
                         </CardBody>
                     </Card>

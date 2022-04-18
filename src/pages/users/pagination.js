@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 
 import DataTable from 'react-data-table-component';
-import user1 from "../../assets/images/users/user1.jpg";
 import { Delete } from '../../shared/deleteHandler';
+import Loader from '../../layouts/loader/Loader';
 
 const PaginationUser = (props) => {
 
@@ -23,11 +22,12 @@ const PaginationUser = (props) => {
                 return (
                     <div className="d-flex align-items-center p-2">
                         <img
-                            src={user1}
+                            src={`http://localhost:5000/${row.image}`}
                             className="rounded-circle"
                             alt="avatar"
                             width="45"
                             height="45"
+                            name='image'
                         />
                         <div className="ms-3">
                             <h6 className="mb-0">{row.name}</h6>
@@ -66,12 +66,17 @@ const PaginationUser = (props) => {
         },
     ];
     const fetchUsers = async page => {
-        setLoading(true);
 
-        const response = await fetch(`http://localhost:5000/users/?page=${page}&per_page=${perPage}&delay=1`);
+        let response;
+        setLoading(true);
+        try {
+             response = await fetch(`http://localhost:5000/users/?page=${page}&per_page=${perPage}&delay=1`);
+        } catch (error) {
+            throw new Error(error)
+        }
         const responseData = await response.json();
 
-        setData(responseData.users);
+        setData(responseData.fetchData);
         setTotalRows(responseData.total);
         setLoading(false);
     };
@@ -102,6 +107,8 @@ const PaginationUser = (props) => {
 
     return (
         <React.Fragment>
+            {loading && <Loader/>}
+            {data && !loading &&
             <DataTable
                 // title="Overview of the Users"
                 columns={columns}
@@ -112,7 +119,7 @@ const PaginationUser = (props) => {
                 paginationTotalRows={totalRows}
                 onChangeRowsPerPage={handlePerRowsChange}
                 onChangePage={handlePageChange}
-            />
+            />}
         </React.Fragment> 
     );
 

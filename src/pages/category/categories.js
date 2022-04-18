@@ -6,11 +6,13 @@ import styles from './categoryTable.module.css';
 import { Delete } from '../../shared/deleteHandler';
 import Modal from '../../shared/modal';
 import { fetchDataFunction } from '../../shared/FetchData';
+import Loader from '../../layouts/loader/Loader';
 
 const CategoryTables = () => {
 
     const [categoriesState, setCategoriesState] = useState([]);
     const [showModal, setShoWModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [id, setId] = useState();
     const modalRef = useRef(null);
     const navigate = useNavigate();
@@ -18,9 +20,12 @@ const CategoryTables = () => {
     const { deleteFunction } = Delete();
 
     useEffect(() => {
+        setLoading(true)
         const fetchData = async () => {
             const data = await fetchDataFunction('categories');
             setCategoriesState(data);
+            setLoading(false)
+
         }
         fetchData();
     }, [setCategoriesState])
@@ -48,7 +53,7 @@ const CategoryTables = () => {
     )
     return (
         <React.Fragment>
-
+            {loading && <Loader />}
             {showModal && <Modal
                 refToggle={modalRef}
                 toggle
@@ -73,25 +78,26 @@ const CategoryTables = () => {
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {categoriesState.map((tdata, index) => (
-                                        <tr key={index} className="border-top">
-                                            <td>{tdata.name}</td>
-                                            {!tdata.parentId ?
-                                                <td style={{ fontWeight: "bold" }}>It's a parent </td>
-                                                :
-                                                <td>{tdata.parentId.name}</td>}
-                                            <td style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }}>
-                                                <span onClick={() => editHandler(tdata._id)}>
-                                                    <i title='Edit' className="bi bi-pencil-square"></i>
-                                                </span>
-                                                <span style={{ zIndex: '33' }} onClick={() => showModalHandler(tdata._id)}  >
-                                                    <i title='Delete' className="bi bi-x-square" ></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
+                                {!loading && categoriesState &&
+                                    <tbody>
+                                        {categoriesState.map((tdata, index) => (
+                                            <tr key={index} className="border-top">
+                                                <td>{tdata.name}</td>
+                                                {!tdata.parentId ?
+                                                    <td style={{ fontWeight: "bold" }}>It's a parent </td>
+                                                    :
+                                                    <td>{tdata.parentId.name}</td>}
+                                                <td style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }}>
+                                                    <span onClick={() => editHandler(tdata._id)}>
+                                                        <i title='Edit' className="bi bi-pencil-square"></i>
+                                                    </span>
+                                                    <span style={{ zIndex: '33' }} onClick={() => showModalHandler(tdata._id)}  >
+                                                        <i title='Delete' className="bi bi-x-square" ></i>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>}
                             </Table>
                         </CardBody>
                     </Card>

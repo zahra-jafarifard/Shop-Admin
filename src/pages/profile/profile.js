@@ -36,7 +36,7 @@ const Profile = (props) => {
     return (
 
         <Card>
-            <CardImg alt="Card image cap" src={user1} className={styles.Image} />
+            <CardImg alt="Card image cap" name='image' src={`http://localhost:5000/${userState.image}`}  className={styles.Image} />
             <CardBody className="p-4">
                 <CardTitle tag="h5"><i style={{ fontSize: "24px" }} className="bi bi-file-earmark-person-fill"></i> Personal Informatin:</CardTitle>
                 <CardSubtitle></CardSubtitle>

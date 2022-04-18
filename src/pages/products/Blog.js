@@ -49,7 +49,7 @@ const Blog = (props) => {
         footer={footer}
       />}
       <Card>
-        <CardImg alt="Card image cap" src={props.image} />
+        <CardImg alt="Card image cap" name='image' src={`http://localhost:5000/${props.image}`} />
         <CardBody className="p-4">
           <CardTitle tag="h5">{props.title}</CardTitle>
           <CardSubtitle>{props.subtitle}</CardSubtitle>

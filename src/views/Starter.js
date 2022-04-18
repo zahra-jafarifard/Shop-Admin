@@ -6,6 +6,7 @@ import Feeds from "../components/dashboard/Feeds";
 import styles from '../pages/products/product.module.css'
 import Blog from "../pages/products/Blog";
 import { fetchDataFunction } from '../shared/FetchData';
+import Users from '../pages/users/users'
 
 const Starter = () => {
   const [productState, setProductState] = useState([]);
@@ -29,16 +30,16 @@ const Starter = () => {
       {/***Sales & Feed***/}
       <Row>
         <Col sm="6" lg="6" xl="7" xxl="8">
-          <SalesChart />
+          {/* <SalesChart /> */}
         </Col>
         <Col sm="6" lg="6" xl="5" xxl="4">
-          <Feeds />
+          {/* <Feeds /> */}
         </Col>
       </Row>
       {/***Table ***/}
       <Row>
         <Col lg="12">
-          {/* <UsersTables /> */}
+          <Users />
         </Col>
       </Row>
       {/***Blog Cards***/}
@@ -48,7 +49,7 @@ const Starter = () => {
             <div className={styles.blog}>
 
               <Blog
-                image={blg.images[0]}
+                image={blg.image}
                 title={blg.name}
                 subtitle={blg.price}
                 text={blg.description}

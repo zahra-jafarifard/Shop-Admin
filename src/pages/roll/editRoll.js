@@ -62,28 +62,11 @@ const EditRoll = (props) => {
 
     const submitHandler = async () => {
         const _rollId = searchParams.get("rollId");
-        const _body = {
+        const _body = JSON.stringify({
             name: inputValue[0].name,
-        };
-        await submitFunction(`rolls/${_rollId}`, 'PATCH', _body);
+        });
+        await submitFunction(`rolls/${_rollId}`, 'PATCH', _body , true);
        navigate(-1)
-
-        // fetch(`http://localhost:5000/rolls/${_rollId}`, {
-        //     method: 'PATCH',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         name: inputValue[0].name,
-        //     })
-        // })
-        //     .then(res => {
-        //         if (!res.ok) {
-        //             return new Error(res.message)
-        //         }
-        //         navigate('/rolls');
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
 
     }
 

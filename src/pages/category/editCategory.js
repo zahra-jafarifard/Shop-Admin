@@ -21,7 +21,7 @@ const initialState = [
     {
         name: '',
         parent: '',
-        getParentCategoriesState: []
+        getParentCategoriesState: [],
 
     }]
 
@@ -77,31 +77,16 @@ const Forms = () => {
 
 
     const submitHandler = async () => {
+        
         const _categoryId = searchParams.get("categoryId");
-        const _body = {
+        const _body = JSON.stringify({
             name: inputValue[0].name,
             parentId: inputValue[0].parent,
-        };
-        await submitFunction(`categories/${_categoryId}`, 'PATCH', _body);
+        });
+        await submitFunction(`categories/${_categoryId}`, 'PATCH', _body , true);
         navigate(-1);
 
-        // fetch(`http://localhost:5000/categories/${_categoryId}`, {
-        //     method: 'PATCH',
-        //     headers: { 'Content-Type': 'application/json' },
-
-        //     body: JSON.stringify({
-        //         name: inputValue[0].name,
-        //         parentId: inputValue[0].parent,
-        //     })
-        // }).then((res) => {
-        //     if (!res.ok) {
-        //         return new Error(res.message)
-        //     }
-        //     navigate('/categories');
-        // })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
+     
     }
 
     const changeHandler = (event) => {
@@ -145,7 +130,10 @@ const Forms = () => {
                                 </Input>
 
                             </FormGroup>
-                            <Button onClick={submitHandler}>Submit</Button>
+                            <Button onClick={submitHandler}>
+
+                                Submit
+                                </Button>
                         </Form>
                     </CardBody>
                 </Card>

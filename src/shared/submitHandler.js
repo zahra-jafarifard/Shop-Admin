@@ -1,10 +1,14 @@
 export const Submit = () => {
 
-    const submitFunction = async (api, method, body) => {
+    const submitFunction = async (api, method, body, setJsonHeader) => {
+        let x = 'undefined';
+        if (setJsonHeader) {
+            x = 'application/json'
+        }
         return fetch(`http://localhost:5000/${api}`, {
             method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+            headers: { 'Content-Type': x },
+            body: body
         })
             .then(res => {
                 if (!res.ok) {

@@ -39,11 +39,11 @@ class NewCategory extends React.Component {
     }
 
     submitHandler = async () => {
-        const _body = {
+        const _body = JSON.stringify({
             name: this.state.name,
             parent: this.state.parent,
-        };
-        await submitFunction('categories', 'POST', _body);
+        });
+        await submitFunction('categories', 'POST', _body , true);
         this.props.navigate('/categories')
 
     }

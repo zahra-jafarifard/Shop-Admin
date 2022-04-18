@@ -22,7 +22,7 @@ class Forms extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', price: '', description: '', image: [],
+            name: '', price: '', description: '', image:'',
             category: '', createdByUserId: '',
             getCategoriesState: [],
 
@@ -38,40 +38,18 @@ class Forms extends React.Component {
     }
 
     submitHandler = async () => {
-        const creatorId = '625456a9156b5221202c6a47';
-        const _body = {
-            name: this.state.name,
-            price: this.state.price,
-            description: this.state.description,
-            image: this.state.image,
-            category: this.state.category,
-            createdByUserId: creatorId
-        };
+        const creatorId = '625d634edcb4f9b5f10e8d9b';
+        const _body = new FormData();
+        _body.append('name', this.state.name);
+        _body.append('price', this.state.price);
+        _body.append('description', this.state.description);
+        _body.append('image', this.state.image);
+        _body.append('category', this.state.category);
+        _body.append('createdByUserId', creatorId);
+
         await submitFunction('products', 'POST', _body);
         this.props.navigate(-1)
-
-        // fetch('http://localhost:5000/products', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         name: this.state.name,
-        //         price: this.state.price,
-        //         description: this.state.description,
-        //         image: this.state.image,
-        //         category: this.state.category,
-        //         createdByUserId: creatorId
-        //     })
-        // })
-        //     .then(res => {
-        //         if (!res.ok) {
-        //             return new Error(res.message)
-        //         }
-        //         this.props.navigate('/products')
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
-
+      
     }
 
     changeHandler = (event) => {
@@ -79,7 +57,17 @@ class Forms extends React.Component {
         let name = event.target.name;
         this.setState({ [name]: value });
     };
-
+    fileHandler = (e) => {
+        let file = e.target.files[0];
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            this.setState({ image: file }, () => {
+                // this.setState({ image: file, preview: fileReader.result }, () => {
+                console.log("state file front", this.state.image);
+            });
+        };
+        fileReader.readAsDataURL(file);
+    };
 
     render() {
 
@@ -128,13 +116,13 @@ class Forms extends React.Component {
                                         onChange={this.changeHandler}
                                     >
                                         <option defaultChecked>Choose Category</option>
-                                        {this.state.getCategoriesState.map((parent, index) => {
+                                        {this.state.getCategoriesState?.map((parent, index) => {
                                             return <option key={index} value={parent.id.toString()}>{parent.name}</option>
                                         })}
                                     </Input>
                                     <Label for="file">File</Label>
-                                    <Input id="file" name="file" type="file" value={this.state.image}
-                                        onChange={this.changeHandler} />
+                                    <Input id="image" name="image" type="file" 
+                                        onChange={this.fileHandler} />
                                     <FormText>
                                         ADD PRODUCTS' PHOTO...
                                     </FormText>
