@@ -1,21 +1,38 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+
 import "./assets/scss/style.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import Loader from "./layouts/loader/Loader";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import shopReducer from './store/reducers/reducers';
+const rootReducer = combineReducers({
+  shop: shopReducer
+});
+const store = configureStore({ reducer: rootReducer });
 
 ReactDOM.render(
-  <Suspense fallback={<Loader />}>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </Suspense>,
+
+  <Provider store={store}>
+    <Suspense fallback={<Loader />}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Suspense>
+  </Provider>,
 
   document.getElementById("root")
 );
+
+
+
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -55,6 +55,7 @@ const ThemeRoutes = [
       { path: "/edit-roll", exact: true, element: <EditRoll /> },
 
       { path: "/profile", exact: true, element: <Profile /> },
+      
     ],
   },
 ];

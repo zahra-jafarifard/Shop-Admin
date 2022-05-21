@@ -23,6 +23,7 @@ const FullLayout = () => {
       </div>
     </main>
   );
+  
 };
 
 export default FullLayout;

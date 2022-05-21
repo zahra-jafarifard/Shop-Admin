@@ -1,8 +1,13 @@
+import { useEffect , useState } from "react";
 import { Button, Nav, NavItem } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
-import user1 from "../assets/images/users/user4.jpg";
-import probg from "../assets/images/bg/download.jpg";
 
+import { fetchDataFunction } from '../shared/FetchData';
+
+import probg from "../assets/images/bg/download.jpg";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Logout } from "../store/actions/actions";
 
 
 const navigation = [
@@ -41,11 +46,28 @@ const navigation = [
 ];
 
 const Sidebar = () => {
+  const [userState, setUserState] = useState([]);
+
+  const dispatch = useDispatch();
+  const userId = useSelector(state => state.shop.userId);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchDataFunction(`users/${userId}`)
+      setUserState(data)
+    }
+    fetchData();
+  }, [setUserState])
+
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
   let location = useLocation();
 
+ const authHandler = (e) => {
+   e.preventDefault();
+    dispatch(Logout());
+  };
   return (
     <div>
       <div className="d-flex align-items-center"></div>
@@ -54,7 +76,12 @@ const Sidebar = () => {
         style={{ background: `url(${probg}) no-repeat` }}
       >
         <div className="p-3 d-flex">
-          <img src={user1} alt="user" width="50" className="rounded-circle" />
+          {userState.image && 
+          <img 
+          src={`http://localhost:5000/${userState.image}`} 
+          style={{height:"43px"}}
+          alt="user" width="50" className="rounded-circle" />}
+          
           <Button
             color="white"
             className="ms-auto text-white d-lg-none"
@@ -63,7 +90,7 @@ const Sidebar = () => {
             <i className="bi bi-x"></i>
           </Button>
         </div>
-        <div className="bg-dark text-white p-2 opacity-75">Zahra Jafarifard</div>
+        <div className="bg-dark text-white p-2 opacity-75">{userState.name} {userState.family}</div>
       </div>
       <div className="p-3 mt-2">
         <Nav vertical className="sidebarNav">
@@ -87,7 +114,8 @@ const Sidebar = () => {
             tag="a"
             target="_blank"
             className="mt-3"
-            href=""
+            href="/login"
+            onClick={authHandler}
           >
             Log Out
           </Button>

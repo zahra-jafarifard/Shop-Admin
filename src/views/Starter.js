@@ -30,10 +30,10 @@ const Starter = () => {
       {/***Sales & Feed***/}
       <Row>
         <Col sm="6" lg="6" xl="7" xxl="8">
-          {/* <SalesChart /> */}
+          <SalesChart />
         </Col>
         <Col sm="6" lg="6" xl="5" xxl="4">
-          {/* <Feeds /> */}
+          <Feeds />
         </Col>
       </Row>
       {/***Table ***/}

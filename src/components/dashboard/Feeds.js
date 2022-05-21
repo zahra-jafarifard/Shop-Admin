@@ -60,7 +60,7 @@ const Feeds = () => {
     }
     fetchData();
   }, [setProductState])
-  const topDocuments = productState.slice(0, 6)
+  const topDocuments = productState.slice(0, 2)
   return (
     <Card>
       <CardBody>
