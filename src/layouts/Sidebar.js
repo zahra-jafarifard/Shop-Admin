@@ -78,7 +78,7 @@ const Sidebar = () => {
         <div className="p-3 d-flex">
           {userState.image && 
           <img 
-          src={`http://localhost:5000/${userState.image}`} 
+            src={`http://localhost:5000/upload/${userState.image}`} 
           style={{height:"43px"}}
           alt="user" width="50" className="rounded-circle" />}
           

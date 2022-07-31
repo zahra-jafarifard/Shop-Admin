@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from '../../shared/withRouter';
 
 import { fetchDataFunction } from '../../shared/FetchData';
-import { Submit } from '../../shared/submitHandler';
+import { submitFunction } from '../../shared/submitHandler';
 import {
     Card,
     Row,
@@ -15,7 +15,7 @@ import {
     Label,
     Input,
 } from "reactstrap";
-const { submitFunction } = Submit()
+
 
 class NewCategory extends React.Component {
     
@@ -89,7 +89,7 @@ class NewCategory extends React.Component {
                                         })}
                                     </Input>
                                 </FormGroup>
-                                <Button onClick={this.submitHandler}>Submit</Button>
+                                <Button color='primary' onClick={this.submitHandler}>Submit</Button>
                             </Form>
                         </CardBody>
                     </Card>

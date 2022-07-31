@@ -22,7 +22,7 @@ const PaginationUser = (props) => {
                 return (
                     <div className="d-flex align-items-center p-2">
                         <img
-                            src={`http://localhost:5000/${row.image}`}
+                            src={`http://localhost:5000/upload/${row.image}`}
                             className="rounded-circle"
                             alt="avatar"
                             width="45"
@@ -43,7 +43,7 @@ const PaginationUser = (props) => {
         },
         {
             name: 'Mobile',
-            selector: row => row.mobile,
+            selector: row => '0' + row.mobile,
         },
         {
             name: 'Roll',

@@ -1,9 +1,9 @@
-import React, { useReducer, useEffect , useState} from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
-import { Submit } from '../../shared/submitHandler';
+import { submitFunction } from '../../shared/submitHandler';
 import {
     Card,
     Row,
@@ -26,13 +26,20 @@ const initialState = [
 
 
 const reducer = (state, action) => {
-    // console.log(state, action)
     switch (action.type) {
         case "Change":
             return state.map((data) => {
                 return {
                     ...data,
                     [action.name]: action.value
+                };
+            });
+        case "SetImage":
+            console.log( action)
+            return state.map((data) => {
+                return {
+                    ...data,
+                    image: action.file.name
                 };
             });
         case "FetchProduct":
@@ -53,16 +60,13 @@ const reducer = (state, action) => {
 const EditProduct = (props) => {
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [image , setImage] = useState('')
     const navigate = useNavigate();
-
-    const { submitFunction } = Submit()
 
 
     useEffect(() => {
         const _productId = searchParams.get("productId");
         const fetchData = async () => {
-            const data = await fetchDataFunction(`products/${_productId}`)
+            const data = await fetchDataFunction(`products/${_productId}`);
             dispatch({ type: "FetchProduct", data });
         }
         fetchData();
@@ -84,11 +88,7 @@ const EditProduct = (props) => {
         let file = e.target.files[0];
         let fileReader = new FileReader();
         fileReader.onload = () => {
-            setImage(file)
-            // this.setState({ image: file }, () => {
-                // this.setState({ image: file, preview: fileReader.result }, () => {
-                console.log("state file front",image);
-            // });
+            dispatch({ type: "SetImage", file });
         };
         fileReader.readAsDataURL(file);
     };
@@ -139,12 +139,13 @@ const EditProduct = (props) => {
                                 />
                                 <Label for="file">File</Label>
                                 <Input id="image" name="image" type="file"
+                                    // value={inputValue[0].description}
                                     onChange={fileHandler} />
                                 <FormText>
                                     ADD NEW PHOTO...
                                 </FormText>
                             </FormGroup>
-                            <Button onClick={submitHandler}>Submit</Button>
+                            <Button color='primary' onClick={submitHandler}>UPDATE</Button>
                         </Form>
                     </CardBody>
                 </Card>

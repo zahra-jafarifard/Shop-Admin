@@ -1,6 +1,4 @@
-export const Submit = () => {
-
-    const submitFunction = async (api, method, body, setJsonHeader) => {
+export const submitFunction = async (api, method, body, setJsonHeader) => {
         let x = {};
         
         if (setJsonHeader) {
@@ -26,5 +24,3 @@ export const Submit = () => {
                 return new Error(err)
             })
     }
-    return { submitFunction };
-}

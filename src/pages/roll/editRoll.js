@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
-import { Submit } from '../../shared/submitHandler';
+import { submitFunction } from '../../shared/submitHandler';
 
 import {
     Card,
@@ -47,7 +47,6 @@ const EditRoll = (props) => {
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { submitFunction } = Submit();
 
 
     useEffect(() => {
@@ -96,7 +95,7 @@ const EditRoll = (props) => {
                                     onChange={changeHandler}
                                 />
                             </FormGroup>
-                            <Button onClick={(e) => submitHandler(e)}>Submit</Button>
+                            <Button color='primary' onClick={(e) => submitHandler(e)}>Submit</Button>
                         </Form>
                     </CardBody>
                 </Card>

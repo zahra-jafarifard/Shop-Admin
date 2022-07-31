@@ -99,7 +99,7 @@ export const authCheckState = () => {
                             new Date().getTime()) /
                         1000
                     );
-                    console.log("remainingTime", remainingTime);
+                    // console.log("remainingTime", remainingTime);
                     dispatch(loginRequest(userData.email, userData.token, userData.userId, remainingTime));
                     dispatch(checkAuthTimeout(remainingTime));
                 }
@@ -110,9 +110,9 @@ export const authCheckState = () => {
 
 export const checkAuthTimeout = (expTime) => {
     return (dispatch) => {
-        console.log('checkAuthTimeout', expTime)
+        // console.log('checkAuthTimeout', expTime)
         setTimeout(() => {
-            dispatch(Logout());
-        }, expTime * 10000);
+            // dispatch(Logout());
+        }, expTime * 1000);
     };
 };

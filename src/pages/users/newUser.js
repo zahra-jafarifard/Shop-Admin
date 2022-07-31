@@ -2,7 +2,7 @@ import React from 'react';
 
 import { fetchDataFunction } from '../../shared/FetchData';
 import { withRouter } from '../../shared/withRouter';
-import { Submit } from '../../shared/submitHandler';
+import { submitFunction } from '../../shared/submitHandler';
 
 import {
     Card,
@@ -18,7 +18,6 @@ import {
     FormText,
 } from "reactstrap";
 
-const { submitFunction } = Submit()
 
 class NewUser extends React.Component {
     constructor(props) {
@@ -145,7 +144,7 @@ class NewUser extends React.Component {
                                         ADD YOUR PHOTO...
                                     </FormText>
                                 </FormGroup>
-                                <Button onClick={this.submitHandler}>ADD</Button>
+                                <Button color='primary' onClick={this.submitHandler}>ADD</Button>
                             </Form>
                         </CardBody>
                     </Card>

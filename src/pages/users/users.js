@@ -32,7 +32,7 @@ const UserTables = () => {
   const footer = (
     <div>
       <Button color="primary" onClick={() => deleteRef.current(id)}>Yes</Button>
-      <Button color="secondary" onClick={cancelHandler}> No</Button>
+      <Button color="danger" onClick={cancelHandler}> No</Button>
     </div>
   )
   return (

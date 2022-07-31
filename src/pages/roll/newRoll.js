@@ -12,8 +12,7 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import { Submit } from '../../shared/submitHandler';
-const { submitFunction } = Submit()
+import { submitFunction } from '../../shared/submitHandler';
 
 class NewRoll extends React.Component {
     constructor(props) {
@@ -65,7 +64,7 @@ class NewRoll extends React.Component {
                                         onChange={this.changeHandler}
                                     />
                                 </FormGroup>
-                                <Button onClick={this.submitHandler}>Submit</Button>
+                                <Button color='primary' onClick={this.submitHandler}>Submit</Button>
                             </Form>
                         </CardBody>
                     </Card>

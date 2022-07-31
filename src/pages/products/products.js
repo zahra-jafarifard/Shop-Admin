@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Row, Col } from "reactstrap";
 import Blog from "./Blog";
-import styles from './product.module.css'
+import styles from './product.module.css';
 import { fetchDataFunction } from '../../shared/FetchData';
 import Loader from '../../layouts/loader/Loader';
 
@@ -41,7 +41,7 @@ const Cards = () => {
             {!loading && productState &&
                 <Row className={styles.content}>
                     {productState.map((blg, index) => (
-                        <Col sm="6" lg="6" xl="3" key={index} >
+                        <Col xs='4' key={index} >
                             <div className={styles.blog}>
 
                                 <Blog

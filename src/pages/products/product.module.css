@@ -7,11 +7,28 @@
 }
 
 .content{
-    margin: 30px;
-    justify-content: space-between;
+     display: inline-flex;
+     /* border : blue solid 2px; */
+     margin: auto;
+     
+    }
+    .card{
+     align-content: space-between;
+    width: 280px ;
+     /* margin:20px 30px; */
+    /* border : red solid 2px; */
+    justify-items: center;
 
 }
 
-.blog{
-    justify-items: left;
-}
+
+
+
+
+/* .blog{ */
+    /* align-items: flex-start; */
+    /* border : green solid 2px; */
+    /* width: 400px; */
+    /* margin: 0 20px; */
+
+/* } */

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
-import { Submit } from '../../shared/submitHandler';
+import { submitFunction } from '../../shared/submitHandler';
 import {
     Card,
     Row,
@@ -56,7 +56,6 @@ const Forms = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { submitFunction } = Submit()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -130,7 +129,7 @@ const Forms = () => {
                                 </Input>
 
                             </FormGroup>
-                            <Button onClick={submitHandler}>
+                            <Button color='primary' onClick={submitHandler}>
 
                                 Submit
                                 </Button>

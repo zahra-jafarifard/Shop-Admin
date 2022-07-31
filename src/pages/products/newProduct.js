@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from '../../shared/withRouter';
-
+import { connect } from 'react-redux';
 import { fetchDataFunction } from '../../shared/FetchData';
 import {
     Card,
@@ -15,8 +15,7 @@ import {
     Input,
     FormText,
 } from "reactstrap";
-import { Submit } from '../../shared/submitHandler';
-const { submitFunction } = Submit();
+import { submitFunction } from '../../shared/submitHandler';
 
 class Forms extends React.Component {
     constructor(props) {
@@ -38,7 +37,7 @@ class Forms extends React.Component {
     }
 
     submitHandler = async () => {
-        const creatorId = '625d634edcb4f9b5f10e8d9b';
+        const creatorId = this.props.userId;
         const _body = new FormData();
         _body.append('name', this.state.name);
         _body.append('price', this.state.price);
@@ -127,7 +126,7 @@ class Forms extends React.Component {
                                         ADD PRODUCTS' PHOTO...
                                     </FormText>
                                 </FormGroup>
-                                <Button onClick={this.submitHandler}>Submit</Button>
+                                <Button color='primary' onClick={this.submitHandler}>ADD</Button>
                             </Form>
                         </CardBody>
                     </Card>
@@ -137,6 +136,11 @@ class Forms extends React.Component {
     };
 }
 
-
-export default withRouter(Forms);
+const mapStateToProps = (state) => {
+    console.log('states' , state)
+    return {
+        userId: state.shop.userId
+    }
+}
+export default connect(mapStateToProps, null)(withRouter(Forms));
 

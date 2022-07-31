@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import './signIn.css';
 import { login } from '../store/actions/actions';
-import { Submit } from '../shared/submitHandler';
+import { submitFunction } from '../shared/submitHandler';
 
 const SignIn = (props) => {
 
@@ -28,7 +28,6 @@ const SignIn = (props) => {
     const [image, setImage] = useState('');
 
     const navigate = useNavigate();
-    const { submitFunction } = Submit();
 
     const userId = useSelector(state => state.shop.userId);
 
@@ -154,11 +153,11 @@ const SignIn = (props) => {
 
                 }
                 <div style={{ textAlign: 'center', margin: '7px 0 ' }} >
-                    <Button onClick={authHandler}>{signIn ? 'Sign In' : 'Sign Up'}</Button><br />
+                    <Button color='primary' onClick={authHandler}>{signIn ? 'Sign In' : 'Sign Up'}</Button><br />
                 </div>
 
                 <div style={{ textAlign: 'center', margin: '5px 0 0 0 ' }}>
-                    <Button onClick={switchHandler}>{signIn ? 'Sitch To Sign up' : 'Sitch To Sign In'}</Button><br />
+                    <Button color='danger' onClick={switchHandler}>{signIn ? 'Switch To Sign up' : 'Switch To Sign In'}</Button><br />
                 </div>
             </Form>
         </div>

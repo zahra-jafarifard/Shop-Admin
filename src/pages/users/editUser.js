@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
-import { Submit } from '../../shared/submitHandler';
+import { submitFunction } from '../../shared/submitHandler';
 
 import {
     Card,
@@ -75,10 +75,10 @@ const EditUser = (props) => {
 
     const [inputValue, dispatch] = useReducer(reducer, initialState);
     const [searchParams, setSearchParams] = useSearchParams();
+
     // const [image , setImage] = useState('')
     const navigate = useNavigate();
 
-    const { submitFunction } = Submit();
 
     useEffect(() => {
         const _userId = searchParams.get("userId");
@@ -176,7 +176,7 @@ const EditUser = (props) => {
                                     value={inputValue[0].email}
                                     onChange={changeHandler}
                                 />
-                                <Label for="password">Password</Label>
+                                {/* <Label for="password">Password</Label>
                                 <Input
                                     id="password"
                                     name="password"
@@ -184,7 +184,7 @@ const EditUser = (props) => {
                                     type="password"
                                     value={inputValue[0].password}
                                     onChange={changeHandler}
-                                />
+                                /> */}
                                 {
                                     inputValue[0].getRollsState &&
                                     <div>
@@ -206,7 +206,7 @@ const EditUser = (props) => {
                                     ADD NEW PHOTO...
                                 </FormText>
                             </FormGroup>
-                            <Button onClick={(e) => submitHandler(e)}>EDIT</Button>
+                            <Button color='primary' onClick={(e) => submitHandler(e)}>EDIT</Button>
                         </Form>
                     </CardBody>
                 </Card>

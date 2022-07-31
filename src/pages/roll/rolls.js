@@ -52,7 +52,7 @@ const RollTables = () => {
     const footer = (
         <div>
             <Button color="primary" onClick={() => deleteHandler(id)}>Yes</Button>
-            <Button color="secondary" onClick={cancelHandler}> No</Button>
+            <Button color="danger" onClick={cancelHandler}> No</Button>
         </div>
     )
     return (

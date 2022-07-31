@@ -87,7 +87,7 @@ const Header = () => {
       </div>
 
       <Collapse navbar isOpen={isOpen}>
-        <Nav className="me-auto" navbar>
+        <Nav className="me-auto" navbar >
           <NavItem>
             <Link to="/users" className="nav-link">
               Users
@@ -132,7 +132,7 @@ const Header = () => {
           
           <DropdownToggle color="transparent">
             {userState.image && <img
-              src={`http://localhost:5000/${userState.image}`}
+              src={`http://localhost:5000/upload/${userState.image}`}
               alt="profile"
               className="rounded-circle"
               width="32"
@@ -150,7 +150,7 @@ const Header = () => {
             </NavItem>
 
             <NavItem style={{ margin: '-10px -15px -12px -15px' }}>
-              <Link to={`/edit-user/?${userId}`} className="nav-link">
+              <Link to={`/edit-user/?userId=${userId}`} className="nav-link">
                 <DropdownItem>Edit Profile</DropdownItem>
               </Link>
             </NavItem>
@@ -163,9 +163,9 @@ const Header = () => {
               </Link>
             </NavItem>
 
-            <NavItem style={{ margin: '-10px -15px -12px -15px' }}>
-              <Link to={'/products'} className="nav-link">
-                <DropdownItem>Logout</DropdownItem>
+            <NavItem onClick={authHandler} style={{ margin: '-10px -15px -12px -15px' }}>
+              <Link to={'/products'}  className="nav-link">
+                <DropdownItem>Log Out</DropdownItem>
               </Link>
             </NavItem>
 

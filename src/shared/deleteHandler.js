@@ -1,12 +1,19 @@
-export const Delete = () => {
+import { useSelector } from "react-redux";
 
+export const Delete = () => {
+    const token = useSelector(state => state.shop.token);
+
+    // console.log('tokennn',token);
     const deleteFunction = async (id, api, setStates) => {
         let Data;
         let _response;
         try {
             Data = await fetch(`http://localhost:5000/${api}/${id}`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
             })
             _response = await Data.json();
             if (!Data.ok) {

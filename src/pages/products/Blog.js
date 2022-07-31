@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './product.module.css';
 
 import Modal from '../../shared/modal';
 import { Delete } from '../../shared/deleteHandler';
@@ -17,9 +18,10 @@ const Blog = (props) => {
 
   const [showModal, setShoWModal] = useState(false);
   const modalRef = useRef(null);
+  
   const navigate = useNavigate();
   const { deleteFunction } = Delete()
-
+  
 
   const editHandler = (id) => {
     navigate(`/edit-product/?productId=${id}`);
@@ -36,7 +38,7 @@ const Blog = (props) => {
   const footer = (
     <div>
       <Button color="primary" onClick={() => deleteHandler(document.getElementById(`hiddenId_${props.id}`).value)}>Yes</Button>
-      <Button color="secondary" onClick={cancelHandler}> No</Button>
+      <Button color="danger" onClick={cancelHandler}> No</Button>
     </div>
   )
   return (
@@ -48,16 +50,19 @@ const Blog = (props) => {
         body='Do you want to delete?'
         footer={footer}
       />}
-      <Card>
-        <CardImg alt="Card image cap" name='image' src={`http://localhost:5000/${props.image}`} />
+      <Card className={styles.card} >
+        <CardImg alt="Card image cap" name='image'
+         src={`http://localhost:5000/upload\\${props.image}`}
+          style={{ height: '280px'  }}
+         />
         <CardBody className="p-4">
           <CardTitle tag="h5">{props.title}</CardTitle>
           <CardSubtitle>{props.subtitle}</CardSubtitle>
-          <CardText className="mt-3">{props.text}</CardText>
+          <CardText style={{fontSize:14}} className="mt-3">{props.text}</CardText>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <input type='hidden' id={`hiddenId_${props.id}`}  value={props.id} />
-            <Button color={props.color} onClick={() => editHandler(props.id)}> Edit </Button>
-            <Button color={props.color} onClick={() => showModalHandler(props.id)} > Delete </Button>
+            <Button color='primary' onClick={() => editHandler(props.id)}> Edit </Button>
+            <Button color='danger' onClick={() => showModalHandler(props.id)} > Delete </Button>
           </div>
 
         </CardBody>
