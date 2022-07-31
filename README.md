@@ -10,7 +10,7 @@ This project is currently in development.client authentication and some details 
 ![1](https://user-images.githubusercontent.com/79651647/182041895-cec9d46e-226d-40ec-a18e-ece704faab3e.png)
 
 # Installation and Setup Instructions
-Clone down this repository. You will need node and npm installed globally on your machine.
+Clone down this repository. You will need `node` and `npm` installed globally on your machine.
 
 ## Installation:
 npm install
