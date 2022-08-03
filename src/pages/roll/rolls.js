@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './rollTable.module.css';
 import { Delete } from '../../shared/deleteHandler';
-import { fetchDataFunction } from '../../shared/FetchData';
+import { graphqlFunction } from '../../shared/graphql';
 import Modal from '../../shared/modal';
 import Loader from '../../layouts/loader/Loader';
 const RollTables = () => {
@@ -15,15 +15,25 @@ const RollTables = () => {
     const [id, setId] = useState();
     const modalRef = useRef(null);
 
-    const { deleteFunction } = Delete();
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true)
         const fetchData = async () => {
-            const data = await fetchDataFunction('rolls');
-            setRollsState(data);
+            const graphqlQuery = {
+                query: `
+                    {
+                        getAllRolls {
+                            _id
+                            name
+                        }
+                    }
+                        `
+            };
+
+            const data = await graphqlFunction(graphqlQuery)
+            setRollsState(data.getAllRolls);
             setLoading(false)
 
         }
@@ -37,9 +47,20 @@ const RollTables = () => {
     const cancelHandler = () => { setShoWModal(false); }
 
 
-    const deleteHandler = (id) => {
+    const deleteHandler = async (id) => {
         setShoWModal(false);
-        deleteFunction(id, 'rolls', setRollsState);
+        const graphqlQuery = {
+            query: `
+            mutation{ 
+                       deleteRoll(id:"${id}"){
+                            message
+                        }
+                    }
+                        `
+        };
+
+        await graphqlFunction(graphqlQuery);
+        setLoading(false)
     }
 
     const editHandler = (id) => {

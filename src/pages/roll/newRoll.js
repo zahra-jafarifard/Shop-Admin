@@ -12,7 +12,8 @@ import {
     Label,
     Input,
 } from "reactstrap";
-import { submitFunction } from '../../shared/submitHandler';
+import { graphqlFunction } from '../../shared/graphql';
+
 
 class NewRoll extends React.Component {
     constructor(props) {
@@ -26,11 +27,17 @@ class NewRoll extends React.Component {
 
 
     submitHandler = async () => {
-        
-        const _body = JSON.stringify({
-            name: this.state.name,
-        });
-        await submitFunction('rolls', 'POST', _body, true);
+        const graphqlQuery = {
+            query: `
+            mutation{ 
+                    addRoll( name:"${this.state.name}"){
+                        message
+                    }
+            }
+            `
+        };
+
+        await graphqlFunction(graphqlQuery);
         this.props.navigate(-1)
     }
 

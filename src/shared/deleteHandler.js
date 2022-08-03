@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 export const Delete = () => {
     const token = useSelector(state => state.shop.token);
 
-    // console.log('tokennn',token);
     const deleteFunction = async (id, api, setStates) => {
         let Data;
         let _response;

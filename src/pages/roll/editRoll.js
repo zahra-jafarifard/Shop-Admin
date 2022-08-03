@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 
 import { fetchDataFunction } from '../../shared/FetchData';
-import { submitFunction } from '../../shared/submitHandler';
+import { graphqlFunction } from '../../shared/graphql';
 
 import {
     Card,
@@ -52,8 +52,20 @@ const EditRoll = (props) => {
     useEffect(() => {
         const _rollId = searchParams.get("rollId");
         const fetchData = async () => {
-            const data = await fetchDataFunction(`rolls/${_rollId}`)
-            return dispatch({ type: "FetchRoll", _roll: data });
+            const graphqlQuery = {
+                query: `
+                        { 
+                            getRollById(id:"${_rollId}" ){
+                                _id
+                                name
+                            }
+                        }
+                        `
+            };
+
+            const data = await graphqlFunction(graphqlQuery);
+            return dispatch({ type: "FetchRoll", _roll: data.getRollById });
+
         }
         fetchData();
     }, [dispatch, fetchDataFunction])
@@ -61,12 +73,17 @@ const EditRoll = (props) => {
 
     const submitHandler = async () => {
         const _rollId = searchParams.get("rollId");
-        const _body = JSON.stringify({
-            name: inputValue[0].name,
-        });
-        await submitFunction(`rolls/${_rollId}`, 'PATCH', _body , true);
-       navigate(-1)
-
+        const graphqlQuery = {
+            query: `
+            mutation{ 
+                        updateRoll(id:"${_rollId}" , name:"${inputValue[0].name}"){
+                            message
+                        }
+                    }
+                        `
+        };
+        await graphqlFunction(graphqlQuery);
+        navigate(-1)
     }
 
     const changeHandler = (event) => {
