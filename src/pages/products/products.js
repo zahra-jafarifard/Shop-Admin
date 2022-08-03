@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Row, Col } from "reactstrap";
@@ -29,6 +29,10 @@ const Cards = () => {
     }
 
     return (
+        <Fragment>
+        <hea>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        </hea>
         <div>
             <h5 className="mb-3">All Products</h5>
 
@@ -59,6 +63,7 @@ const Cards = () => {
                     ))}
                 </Row>}
         </div>
+        </Fragment>
     );
 };
 

@@ -1,14 +1,15 @@
-.Card{
+.Card {
     border: 2px silver solid;
     border-radius: 8px;
     box-shadow: 3px 3px rgb(243, 209, 236);
     width: 360px;
     margin: auto;
-    background-color:rgb(205, 238, 249);
+    background-color: rgb(205, 238, 249);
     text-align: center;
 }
 
-.Image{
+
+.Image {
     border: 3px silver solid;
     border-radius: 130px;
     width: 210px;
@@ -18,23 +19,44 @@
     overflow: hidden;
 
 }
-.body{
+
+.body {
     width: 70%;
     /* border: 2px rgb(18, 7, 7) solid; */
     margin: auto;
     margin-top: 20px;
 }
 
-.body label{
+.body label {
     padding: 2px;
     font-weight: 500;
     color: rgb(102, 99, 99);
 
 }
 
-.submit{
-padding: 12px;
-margin-left: 21%;
-padding: 7px 160px;
+.submit {
+    padding: 12px;
+    margin-left: 21%;
+    padding: 7px 160px;
 
+}
+.Icon {
+    width: 22px;
+    height: 22px;
+}
+@media (max-width: 400px) {
+    .Card {
+        width: 200px;
+        /* margin: 0px 25%; */
+    }
+
+    .Image {
+        width: 90px;
+        height: 90px;
+    }
+
+    .Icon {
+        width: 10px;
+        height: 10px;
+    }
 }

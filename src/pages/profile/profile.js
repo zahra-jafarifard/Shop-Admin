@@ -42,7 +42,7 @@ const Profile = (props) => {
                 src={`http://localhost:5000/upload/${userState.image}`}
                 className={styles.Image} />}
             <CardBody className="p-3">
-                <CardTitle tag="h5"><i style={{ fontSize: "24px" }} className="bi bi-file-earmark-person-fill"></i> Personal Informatin:</CardTitle>
+                <CardTitle tag="h5"><i className={` bi bi-file-earmark-person-fill ${styles.Icon} `} ></i> Personal Informatin:</CardTitle>
                 <div className={styles.content}>
                 <CardText className="mt-3">{userState.name} {userState.family}</CardText>
                 <CardText className="mt-3">+98{userState.mobile}</CardText>
