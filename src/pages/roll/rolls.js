@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef} from 'react';
-import { Card, CardBody, CardTitle, Table, Col, Row , Button } from "reactstrap";
+import React, { useState, useEffect, useRef } from 'react';
+import { Card, CardBody, CardTitle, Table, Col, Row, Button } from "reactstrap";
 import { useNavigate } from 'react-router-dom';
 
 import styles from './rollTable.module.css';
@@ -36,7 +36,7 @@ const RollTables = () => {
     }
     const cancelHandler = () => { setShoWModal(false); }
 
-    
+
     const deleteHandler = (id) => {
         setShoWModal(false);
         deleteFunction(id, 'rolls', setRollsState);
@@ -82,21 +82,21 @@ const RollTables = () => {
                                     </tr>
                                 </thead>
                                 {rollsState && !loading &&
-                                <tbody>
-                                    {rollsState.map((tdata, index) => (
-                                        <tr key={index} className="border-top">
-                                            <td>{tdata.name}</td>
-                                            <td style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }}>
-                                                <span onClick={() => editHandler(tdata._id.toString())}>
-                                                    <i title='Edit' className="bi bi-pencil-square"></i>
-                                                </span>
-                                                <span onClick={() => showModalHandler(tdata._id.toString())}>
-                                                    <i title='Delete' className="bi bi-x-square" ></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>}
+                                    <tbody>
+                                        {rollsState.map((tdata, index) => (
+                                            <tr key={index} className="border-top">
+                                                <td>{tdata.name}</td>
+                                                <td style={{ borderLeft: 'none', display: "flex", alignContent: "center", justifyContent: "space-around" }}>
+                                                    <span onClick={() => editHandler(tdata._id.toString())}>
+                                                        <i title='Edit' className="bi bi-pencil-square"></i>
+                                                    </span>
+                                                    <span onClick={() => showModalHandler(tdata._id.toString())}>
+                                                        <i title='Delete' className="bi bi-x-square" ></i>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>}
                             </Table>
                         </CardBody>
                     </Card>

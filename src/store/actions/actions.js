@@ -20,17 +20,24 @@ export const loginFailed = (err) => {
 
 
 export const login = (email, password) => {
-    // console.log(email, password)
+    const graphqlQuery = {
+        query: `
+        {
+          signIn(email: "${email}", password: "${password}") {
+              userId
+              email
+              token
+          }
+        }
+      `
+    };
     return (dispatch) => {
-        return fetch('http://localhost:5000/users/signIn', {
+        return fetch('http://localhost:5000/graphql', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
+            body: JSON.stringify(graphqlQuery),
         })
             .then((response) => {
                 if (response.status === 422 || response.status === 403 || (!response.ok)) {
@@ -44,14 +51,12 @@ export const login = (email, password) => {
             })
             .then((res) => {
 
-
                 const expirationTime = new Date(new Date().getTime() + 3600000);
-                // console.log(res)
                 localStorage.setItem(
                     'userData',
                     JSON.stringify({
-                        userId: res.userId,
-                        token: res.token,
+                        userId: res.data.signIn.userId,
+                        token: res.data.signIn.token,
                     })
                 );
                 localStorage.setItem(
@@ -61,7 +66,7 @@ export const login = (email, password) => {
                     })
                 );
 
-                dispatch(loginRequest(res.email, res.token, res.userId, expirationTime));
+                dispatch(loginRequest(res.data.signIn.email, res.data.signIn.token, res.data.signIn.userId, expirationTime));
                 dispatch(checkAuthTimeout(expirationTime));
             })
             .catch((e) => {
